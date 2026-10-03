@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -175,11 +174,12 @@
         }
 
         .input-nota {
-            width: 45px;
+            width: 60px;
             padding: 5px;
             text-align: center;
             border: 1px solid #cbd5e0;
             border-radius: 4px;
+            text-transform: uppercase;
         }
 
         .input-nota:disabled {
@@ -189,13 +189,6 @@
             border-color: #e2e8f0;
         }
 
-        .nota-con-error {
-            background-color: #fff5f5 !important;
-            border: 2px solid var(--danger) !important;
-            color: var(--danger) !important;
-            font-weight: bold;
-        }
-
         .badge-materia {
             display: inline-block;
             padding: 4px 8px;
@@ -203,56 +196,6 @@
             border-radius: 12px;
             margin: 3px;
             font-size: 0.85em;
-        }
-
-        .badge-adeuda {
-            display: inline-block;
-            padding: 3px 6px;
-            border-radius: 4px;
-            background: #edf2f7;
-            color: #4a5568;
-            margin: 2px;
-            font-size: 0.82em;
-        }
-
-        .badge-riesgo {
-            display: inline-block;
-            padding: 3px 6px;
-            border-radius: 4px;
-            background: #feebc8;
-            color: #7b341e;
-            margin: 2px;
-            font-size: 0.82em;
-            font-weight: bold;
-        }
-
-        .badge-estado-pendiente {
-            background: #feebc8;
-            color: #7b341e;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 0.8em;
-        }
-
-        .badge-estado-activo {
-            background: #c6f6d5;
-            color: #22543d;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 0.8em;
-        }
-
-        .nota-observacion {
-            font-size: 0.78em;
-            color: #c53030;
-            background-color: #fff5f5;
-            border-left: 3px solid var(--danger);
-            padding: 4px 8px;
-            margin-top: 5px;
-            text-align: left;
-            border-radius: 2px;
         }
 
         .banner-readonly {
@@ -268,11 +211,10 @@
             gap: 10px;
         }
 
-        .status-danger { background-color: var(--danger-bg) !important; }
         .hidden { display: none !important; }
 
         @media print {
-            header, .dashboard-header, .section-box, .btn, .banner-readonly, .no-print, .btn-reportar-error { display: none !important; }
+            header, .dashboard-header, .section-box, .btn, .banner-readonly, .no-print { display: none !important; }
             body { background: white; }
             .table-container { box-shadow: none; }
         }
@@ -293,8 +235,8 @@
         <!-- ACCESO Y REGISTRO AL SISTEMA -->
         <div id="authSection" class="auth-card">
             <div class="auth-tabs">
-                <button class="auth-tab-btn active" onclick="switchAuthTab('login')">Iniciar Sesión</button>
-                <button class="auth-tab-btn" onclick="switchAuthTab('register')">Crear Cuenta</button>
+                <button class="auth-tab-btn active" id="tabLoginBtn" onclick="switchAuthTab('login')">Iniciar Sesión</button>
+                <button class="auth-tab-btn" id="tabRegBtn" onclick="switchAuthTab('register')">Crear Cuenta</button>
             </div>
 
             <!-- LOGIN -->
@@ -311,8 +253,9 @@
 
                 <button type="submit" class="btn btn-primary" style="width:100%;">Ingresar al Sistema</button>
 
-                <div style="text-align: center; margin-top: 15px;">
+                <div style="text-align: center; margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
                     <a href="#" onclick="recuperarClave()" style="font-size: 0.85em; color: var(--secondary); text-decoration: none;">¿Olvidaste tu contraseña?</a>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="vaciarRegistroDNIs()">⚠️ Limpiar DNIs Registrados</button>
                 </div>
             </form>
 
@@ -376,14 +319,15 @@
                 🔒 <b>Modo Consulta de Registro Histórico:</b> Estás viendo notas de un Año Lectivo anterior. Solo Directivos o Secretaría pueden modificarlas.
             </div>
 
-            <!-- MÓDULO EXCLUSIVO DIRECTIVO/SECRETARÍA: GESTIÓN DE USUARIOS Y APROBACIONES -->
+            <!-- MÓDULO EXCLUSIVO DIRECTIVO/SECRETARÍA: GESTIÓN DE USUARIOS -->
             <div id="moduloGestionUsuarios" class="section-box no-print hidden">
                 <h4 style="margin-top:0; color: var(--primary);">🔐 Control Institucional de Accesos y Aprobaciones</h4>
                 <p style="font-size:0.85em; color:#718096; margin-top:-8px;">Aprobación de auxiliares registrados y generación de códigos de invitación.</p>
                 
-                <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+                <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap; align-items:center;">
                     <button class="btn btn-primary" onclick="generarCodigoInvitacion()">🔑 Generar Código de Invitación Rápida</button>
-                    <span id="txtCodigoGenerado" style="font-weight:bold; align-self:center; color:var(--secondary);"></span>
+                    <span id="txtCodigoGenerado" style="font-weight:bold; color:var(--secondary);"></span>
+                    <button class="btn btn-danger" onclick="vaciarRegistroDNIs()" style="margin-left:auto;">🗑️ Resetear Todos los Usuarios/DNIs</button>
                 </div>
 
                 <div class="table-container">
@@ -404,7 +348,7 @@
                     </table>
                 </div>
             </div>
-            
+
             <!-- CONFIGURACIÓN DE PLAN DE ESTUDIOS -->
             <div class="section-box no-print">
                 <h4 style="margin-top:0; color: var(--primary);">📚 Plan de Estudios del Colegio (Registro Único)</h4>
@@ -441,7 +385,7 @@
                 <form onsubmit="agregarAlumnoManual(event)" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
                     <div style="flex:2; min-width:180px;">
                         <label style="font-size:0.85em; font-weight:bold;">Nombre y Apellido</label>
-                        <input type="text" id="nuevoNombre" class="form-control" placeholder="Ej: Perez, Juan" required>
+                        <input type="text" id="nuevoNombre" class="form-control" placeholder="Ej: Pérez, Juan" required>
                     </div>
                     <div style="flex:1; min-width:90px;">
                         <label style="font-size:0.85em; font-weight:bold;">Año Lectivo</label>
@@ -512,551 +456,20 @@
                             <option value="6">6° Año</option>
                         </select>
                     </div>
-                    <div>
-                        <label><b>Trimestre:</b></label>
-                        <select id="filterTrimestre" class="form-control" onchange="cargarTabla()">
-                            <option value="0">1° Trimestre</option>
-                            <option value="1">2° Trimestre</option>
-                            <option value="2">3° Trimestre</option>
-                        </select>
-                    </div>
                 </div>
-
                 <div>
-                    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / PDF</button>
-                    <button id="btnGuardarNotas" class="btn btn-success" onclick="guardarNotasMemoria()">💾 Guardar Calificaciones</button>
+                    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir Planilla</button>
                 </div>
             </div>
 
-            <!-- GRILLA DINÁMICA -->
+            <!-- TABLA PRINCIPAL DE NOTAS -->
             <div class="table-container">
                 <table>
                     <thead>
-                        <tr id="encabezadoTabla">
+                        <tr id="tablaEncabezado">
                             <!-- Columnas dinámicas -->
                         </tr>
                     </thead>
                     <tbody id="tablaCuerpo">
-                        <!-- Filas de alumnos -->
+                        <!-- Alumnos dinámicos -->
                     </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        const ANIO_LECTIVO_ACTUAL = "2026";
-
-        const planEstudiosPredeterminado = {
-            "1": ["Matemática", "Lengua", "Historia", "Geografía", "Biología", "Inglés"],
-            "2": ["Matemática", "Lengua", "Historia", "Física", "Biología", "Inglés"],
-            "3": ["Matemática", "Lengua", "Historia", "Química", "Física", "Inglés"],
-            "4": ["Matemática", "Lengua", "Historia", "Física", "Química", "Economía"],
-            "5": ["Matemática", "Lengua", "Filosofía", "Física", "Química", "Derecho"],
-            "6": ["Matemática", "Lengua", "Sociología", "Física", "Proyectos", "Inglés"]
-        };
-
-        let planEstudios = JSON.parse(localStorage.getItem('plan_estudios_colegio')) || planEstudiosPredeterminado;
-        
-        // BASE DE DATOS DE USUARIOS (Incluye flags de aprobación)
-        let usuariosDB = JSON.parse(localStorage.getItem('usuarios_colegio')) || [
-            {
-                nombre: "Directora Institucional",
-                role: "directivo",
-                textoRol: "Equipo Directivo",
-                dni: "1",
-                email: "direccion@colegio.edu.ar",
-                pass: "1234",
-                estado: "aprobado",
-                esAutorizadoEditarHistorico: true
-            }
-        ];
-
-        let codigosInvitacionValidos = JSON.parse(localStorage.getItem('codigos_invitacion_colegio')) || ["LP2026"];
-        
-        let alumnosDB = JSON.parse(localStorage.getItem('alumnos_colegio')) || [
-            { 
-                id: 101, 
-                nombre: "Pérez, Juan Martín", 
-                anoLectivo: "2026", 
-                curso: "1", 
-                turno: "M", 
-                adeudadas: ["Matemática (Primaria)"], 
-                notas: { "Matemática": [6, null, null], "Lengua": [7, null, null] },
-                observaciones: {}
-            }
-        ];
-
-        let usuarioActual = null;
-
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.remove('active'));
-            if(tab === 'login') {
-                document.querySelectorAll('.auth-tab-btn')[0].classList.add('active');
-                document.getElementById('loginForm').classList.remove('hidden');
-                document.getElementById('registerForm').classList.add('hidden');
-            } else {
-                document.querySelectorAll('.auth-tab-btn')[1].classList.add('active');
-                document.getElementById('loginForm').classList.add('hidden');
-                document.getElementById('registerForm').classList.remove('hidden');
-            }
-        }
-
-        function toggleRegCurso() {
-            const role = document.getElementById('regRole').value;
-            const regCursoGroup = document.getElementById('regCursoGroup');
-            regCursoGroup.style.display = (role === 'auxiliar') ? 'block' : 'none';
-        }
-
-        function handleRegister(e) {
-            e.preventDefault();
-            const dni = document.getElementById('regDni').value.trim();
-            const role = document.getElementById('regRole').value;
-            const codigoIngresado = document.getElementById('regCodigoInvitacion').value.trim();
-
-            if (usuariosDB.find(u => u.dni === dni)) {
-                alert('El DNI ingresado ya está registrado.');
-                return;
-            }
-
-            let textoRol = 'Auxiliar Docente / Preceptor';
-            if (role === 'directivo') textoRol = 'Equipo Directivo';
-            if (role === 'secretaria') textoRol = 'Secretaría Académica';
-
-            // Si ingresa un código válido o es directivo/secretario, auto-aprobar
-            const esCodigoValido = codigosInvitacionValidos.includes(codigoIngresado);
-            const requiereAprobacion = (role === 'auxiliar') && !esCodigoValido;
-
-            const nuevoUser = {
-                nombre: document.getElementById('regNombre').value.trim(),
-                role: role,
-                textoRol: textoRol,
-                dni: dni,
-                email: document.getElementById('regEmail').value.trim(),
-                curso: role === 'auxiliar' ? document.getElementById('regCurso').value : null,
-                pass: document.getElementById('regPass').value,
-                estado: requiereAprobacion ? "pendiente" : "aprobado",
-                esAutorizadoEditarHistorico: (role === 'directivo' || role === 'secretaria')
-            };
-
-            usuariosDB.push(nuevoUser);
-            localStorage.setItem('usuarios_colegio', JSON.stringify(usuariosDB));
-
-            if (requiereAprobacion) {
-                alert('✅ Solicitud enviada exitosamente.\n\nSu cuenta está PENDIENTE DE APROBACIÓN por el Equipo Directivo o Secretaría. Podrá ingresar una vez sea habilitado.');
-            } else {
-                alert('¡Usuario habilitado con éxito! Ya puede iniciar sesión.');
-            }
-
-            switchAuthTab('login');
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const dni = document.getElementById('loginDni').value.trim();
-            const pass = document.getElementById('loginPass').value;
-
-            const user = usuariosDB.find(u => u.dni === dni && u.pass === pass);
-
-            if (!user) {
-                alert('DNI o Contraseña incorrecta.');
-                return;
-            }
-
-            if (user.estado === 'pendiente') {
-                alert('⚠ Cuenta pendiente de activación.\n\nEl Equipo Directivo o Secretaría debe aprobar su acceso antes de poder ingresar.');
-                return;
-            }
-
-            usuarioActual = user;
-            iniciarSesionDashboard();
-        }
-
-        function recuperarClave() {
-            const emailIngresado = prompt('Ingrese el correo electrónico registrado:');
-            if (emailIngresado) {
-                const user = usuariosDB.find(u => u.email.toLowerCase() === emailIngresado.trim().toLowerCase());
-                if (user) {
-                    alert(`Su contraseña de acceso es: ${user.pass}`);
-                } else {
-                    alert('No se encontró ningún usuario con ese correo.');
-                }
-            }
-        }
-
-        function iniciarSesionDashboard() {
-            document.getElementById('authSection').classList.add('hidden');
-            document.getElementById('dashboardSection').classList.remove('hidden');
-            document.getElementById('userInfo').classList.remove('hidden');
-            
-            document.getElementById('userName').innerText = usuarioActual.nombre;
-            document.getElementById('userRole').innerText = usuarioActual.textoRol;
-
-            if (usuarioActual.curso) {
-                const [curso, turno] = usuarioActual.curso.split('_');
-                document.getElementById('filterCurso').value = curso;
-                document.getElementById('filterTurno').value = turno;
-            }
-
-            // Mostrar u ocultar Panel Directivo de Usuarios
-            const modUsuarios = document.getElementById('moduloGestionUsuarios');
-            if (usuarioActual.esAutorizadoEditarHistorico) {
-                modUsuarios.classList.remove('hidden');
-                cargarTablaUsuarios();
-            } else {
-                modUsuarios.classList.add('hidden');
-            }
-
-            mostrarMateriasConfiguradas();
-            cargarTabla();
-        }
-
-        function cerrarSesion() {
-            usuarioActual = null;
-            document.getElementById('authSection').classList.remove('hidden');
-            document.getElementById('dashboardSection').classList.add('hidden');
-            document.getElementById('userInfo').classList.add('hidden');
-        }
-
-        // GESTIÓN DE USUARIOS Y APROBACIONES (DIRECTIVO/SECRETARÍA)
-        function cargarTablaUsuarios() {
-            const tbody = document.getElementById('tablaUsuariosCuerpo');
-            tbody.innerHTML = '';
-
-            usuariosDB.forEach((u, index) => {
-                const esPendiente = u.estado === 'pendiente';
-                const badgeEstado = esPendiente 
-                    ? `<span class="badge-estado-pendiente">⏳ Pendiente</span>`
-                    : `<span class="badge-estado-activo">✔ Habilitado</span>`;
-
-                let botonesAccion = '-';
-                if (esPendiente) {
-                    botonesAccion = `
-                        <button class="btn btn-success btn-sm" onclick="cambiarEstadoUsuario(${index}, 'aprobado')">✔ Aprobar</button>
-                        <button class="btn btn-danger btn-sm" onclick="eliminarUsuario(${index})">✖ Rechazar</button>`;
-                } else if (u.dni !== usuarioActual.dni) {
-                    botonesAccion = `<button class="btn btn-danger btn-sm" onclick="eliminarUsuario(${index})">🗑 Revocar</button>`;
-                }
-
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><b>${u.nombre}</b></td>
-                    <td>${u.textoRol}</td>
-                    <td>${u.curso ? u.curso.replace('_', '° ') : 'Todos'}</td>
-                    <td>${u.email}</td>
-                    <td>${badgeEstado}</td>
-                    <td>${botonesAccion}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function cambiarEstadoUsuario(index, nuevoEstado) {
-            usuariosDB[index].estado = nuevoEstado;
-            localStorage.setItem('usuarios_colegio', JSON.stringify(usuariosDB));
-            cargarTablaUsuarios();
-            alert('Estado de usuario actualizado.');
-        }
-
-        function eliminarUsuario(index) {
-            if (confirm('¿Desea revocar o rechazar el acceso a este usuario?')) {
-                usuariosDB.splice(index, 1);
-                localStorage.setItem('usuarios_colegio', JSON.stringify(usuariosDB));
-                cargarTablaUsuarios();
-            }
-        }
-
-        function generarCodigoInvitacion() {
-            const nuevoCodigo = 'INV-' + Math.floor(1000 + Math.random() * 9000);
-            codigosInvitacionValidos.push(nuevoCodigo);
-            localStorage.setItem('codigos_invitacion_colegio', JSON.stringify(codigosInvitacionValidos));
-            document.getElementById('txtCodigoGenerado').innerText = `Código Activo: ${nuevoCodigo}`;
-            alert(`Código generado: ${nuevoCodigo}\n\nEntregue este código al auxiliar para que al registrarse se active automáticamente.`);
-        }
-
-        // PLAN DE ESTUDIOS
-        function mostrarMateriasConfiguradas() {
-            const cursoSel = document.getElementById('configCursoSel').value;
-            const contenedor = document.getElementById('listaMateriasConfig');
-            const materias = planEstudios[cursoSel] || [];
-
-            contenedor.innerHTML = '<b>Materias de ' + cursoSel + '° Año:</b><br>';
-            materias.forEach((m, index) => {
-                const btnEliminar = (usuarioActual && usuarioActual.esAutorizadoEditarHistorico) 
-                    ? `<a href="#" onclick="eliminarMateriaPlan('${cursoSel}', ${index})" style="color:red; font-weight:bold; margin-left:5px; text-decoration:none;">×</a>`
-                    : '';
-
-                contenedor.innerHTML += `<span class="badge-materia">${m} ${btnEliminar}</span>`;
-            });
-        }
-
-        function agregarMateriaAlPlan() {
-            if (!usuarioActual.esAutorizadoEditarHistorico) {
-                alert('Solo el Equipo Directivo o Secretaría pueden modificar el Plan de Estudios.');
-                return;
-            }
-            const cursoSel = document.getElementById('configCursoSel').value;
-            const nueva = document.getElementById('nuevaMateriaNombre').value.trim();
-
-            if(!nueva) return;
-
-            if(!planEstudios[cursoSel]) planEstudios[cursoSel] = [];
-            if(!planEstudios[cursoSel].includes(nueva)) {
-                planEstudios[cursoSel].push(nueva);
-                localStorage.setItem('plan_estudios_colegio', JSON.stringify(planEstudios));
-                document.getElementById('nuevaMateriaNombre').value = '';
-                mostrarMateriasConfiguradas();
-                cargarTabla();
-            }
-        }
-
-        function eliminarMateriaPlan(curso, index) {
-            if (!usuarioActual.esAutorizadoEditarHistorico) {
-                alert('Solo Directivos/Secretaría pueden eliminar materias.');
-                return;
-            }
-            if(confirm('¿Eliminar esta materia del plan de estudios?')) {
-                planEstudios[curso].splice(index, 1);
-                localStorage.setItem('plan_estudios_colegio', JSON.stringify(planEstudios));
-                mostrarMateriasConfiguradas();
-                cargarTabla();
-            }
-        }
-
-        // CARGA Y ACCIONES SOBRE ALUMNOS
-        function agregarAlumnoManual(e) {
-            e.preventDefault();
-            const adeudadasTexto = document.getElementById('nuevoAdeudadas').value;
-            const adeudadasArray = adeudadasTexto ? adeudadasTexto.split(',').map(s => s.trim()) : [];
-
-            const nuevo = {
-                id: Date.now(),
-                nombre: document.getElementById('nuevoNombre').value,
-                anoLectivo: document.getElementById('nuevoAnoLectivo').value,
-                turno: document.getElementById('nuevoTurno').value,
-                curso: document.getElementById('nuevoCurso').value,
-                adeudadas: adeudadasArray,
-                notas: {},
-                observaciones: {}
-            };
-
-            alumnosDB.push(nuevo);
-            guardarAlumnosEnStorage();
-            
-            document.getElementById('filterAnoLectivo').value = nuevo.anoLectivo;
-            document.getElementById('filterTurno').value = nuevo.turno;
-            document.getElementById('filterCurso').value = nuevo.curso;
-            
-            document.getElementById('nuevoNombre').value = '';
-            document.getElementById('nuevoAdeudadas').value = '';
-            
-            cargarTabla();
-            alert('Alumno registrado.');
-        }
-
-        function editarAlumnoUrgente(id) {
-            if (!usuarioActual.esAutorizadoEditarHistorico) {
-                alert('Solo Directivos o Secretaría pueden editar datos.');
-                return;
-            }
-
-            const alumno = alumnosDB.find(a => a.id === id);
-            if(!alumno) return;
-
-            const nuevoNombre = prompt("Editar Nombre y Apellido:", alumno.nombre);
-            if(nuevoNombre === null) return;
-
-            const adeudadasStr = prompt("Editar Materias Adeudadas (separadas por coma):", alumno.adeudadas.join(', '));
-            
-            alumno.nombre = nuevoNombre.trim();
-            alumno.adeudadas = adeudadasStr ? adeudadasStr.split(',').map(s => s.trim()) : [];
-
-            guardarAlumnosEnStorage();
-            cargarTabla();
-            alert("✅ Datos actualizados.");
-        }
-
-        function eliminarAlumnoUrgente(id) {
-            if (!usuarioActual.esAutorizadoEditarHistorico) {
-                alert('Solo Directivos o Secretaría pueden eliminar alumnos.');
-                return;
-            }
-
-            if(confirm("⚠ ¿ESTÁ SEGURO DE ELIMINAR ESTE ALUMNO?")) {
-                alumnosDB = alumnosDB.filter(a => a.id !== id);
-                guardarAlumnosEnStorage();
-                cargarTabla();
-                alert("Registro eliminado.");
-            }
-        }
-
-        function reportarErrorNota(alumnoId, materia, trimIndex) {
-            const alumno = alumnosDB.find(a => a.id === alumnoId);
-            if(!alumno) return;
-
-            const notaKey = `${materia}_${trimIndex}`;
-            const notaObs = prompt("Escriba el detalle del error para Directivos/Secretaría:\n(Ej: 'Le erré a la nota, era un 7 y no un 8')", alumno.observaciones && alumno.observaciones[notaKey] ? alumno.observaciones[notaKey] : "");
-
-            if(notaObs !== null && notaObs.trim() !== "") {
-                if(!alumno.observaciones) alumno.observaciones = {};
-                alumno.observaciones[notaKey] = notaObs.trim();
-                guardarAlumnosEnStorage();
-                cargarTabla();
-                alert("📌 Reporte registrado y marcado para revisión directiva.");
-            }
-        }
-
-        function cargarTabla() {
-            const anoLectivo = document.getElementById('filterAnoLectivo').value;
-            const turno = document.getElementById('filterTurno').value;
-            const curso = document.getElementById('filterCurso').value;
-            const trimIndex = parseInt(document.getElementById('filterTrimestre').value);
-
-            const esAnoAnterior = anoLectivo !== ANIO_LECTIVO_ACTUAL;
-            const esDirectivoSecretaria = usuarioActual && usuarioActual.esAutorizadoEditarHistorico;
-            const puedeModificarNotas = !esAnoAnterior || esDirectivoSecretaria;
-
-            const banner = document.getElementById('bannerReadOnly');
-            const btnGuardar = document.getElementById('btnGuardarNotas');
-
-            if (!puedeModificarNotas) {
-                banner.classList.remove('hidden');
-                btnGuardar.classList.add('hidden');
-            } else {
-                banner.classList.add('hidden');
-                btnGuardar.classList.remove('hidden');
-            }
-
-            const materiasDelCurso = planEstudios[curso] || [];
-            const headerTr = document.getElementById('encabezadoTabla');
-            const tbody = document.getElementById('tablaCuerpo');
-
-            let headerHTML = `<th style="text-align:left;">Alumno</th><th>Año</th>`;
-            materiasDelCurso.forEach(m => {
-                headerHTML += `<th>${m}</th>`;
-            });
-            headerHTML += `<th>Materias Previas</th><th>Proyección / Riesgo</th>`;
-            if (esDirectivoSecretaria) {
-                headerHTML += `<th class="no-print">Gestión Directiva</th>`;
-            }
-            headerTr.innerHTML = headerHTML;
-
-            tbody.innerHTML = '';
-            const filtrados = alumnosDB.filter(a => a.anoLectivo === anoLectivo && a.turno === turno && a.curso === curso);
-
-            if(filtrados.length === 0) {
-                const totalCols = materiasDelCurso.length + (esDirectivoSecretaria ? 5 : 4);
-                tbody.innerHTML = `<tr><td colspan="${totalCols}" style="text-align:center;">No hay alumnos cargados.</td></tr>`;
-                return;
-            }
-
-            filtrados.forEach(a => {
-                let inputsMateriasHTML = '';
-                let riesgoFuturo = [];
-                let listaNotasConObservacionHTML = '';
-
-                materiasDelCurso.forEach(mat => {
-                    if(!a.notas) a.notas = {};
-                    if(!a.observaciones) a.observaciones = {};
-
-                    const notas = a.notas[mat] || [null, null, null];
-                    const valorActual = (notas[trimIndex] !== null && notas[trimIndex] !== undefined) ? notas[trimIndex] : '';
-                    
-                    if(valorActual !== '' && parseFloat(valorActual) < 6) {
-                        riesgoFuturo.push(mat);
-                    }
-
-                    const notaKey = `${mat}_${trimIndex}`;
-                    const tieneErrorMarcado = !!a.observaciones[notaKey];
-
-                    if(tieneErrorMarcado) {
-                        listaNotasConObservacionHTML += `<div class="nota-observacion"><b>📌 ${mat}:</b> ${a.observaciones[notaKey]}</div>`;
-                    }
-
-                    const disabledAttr = puedeModificarNotas ? '' : 'disabled';
-                    const classError = tieneErrorMarcado ? 'nota-con-error' : '';
-
-                    inputsMateriasHTML += `
-                        <td>
-                            <div class="cell-nota-container">
-                                <input type="number" class="input-nota ${classError}" min="1" max="10" 
-                                       value="${valorActual}" ${disabledAttr}
-                                       onchange="actualizarNotaMemoria(${a.id}, '${mat}', ${trimIndex}, this.value)">
-                                <button type="button" class="btn btn-warning btn-sm btn-reportar-error" 
-                                        title="Marcar o reportar error en la nota"
-                                        onclick="reportarErrorNota(${a.id}, '${mat}', ${trimIndex})">⚠ Error</button>
-                            </div>
-                        </td>`;
-                });
-
-                const totalAdeudadasPrevias = a.adeudadas.length;
-                const totalRiesgoActual = riesgoFuturo.length;
-                const esRiesgoCritico = (totalAdeudadasPrevias + totalRiesgoActual) >= 3;
-
-                const listaAdeudadasHTML = totalAdeudadasPrevias > 0 
-                    ? a.adeudadas.map(m => `<span class="badge-adeuda">${m}</span>`).join('') 
-                    : '<small style="color:#38a169;">Al día</small>';
-
-                const listaRiesgoHTML = totalRiesgoActual > 0
-                    ? riesgoFuturo.map(m => `<span class="badge-riesgo">Riesgo: ${m}</span>`).join('')
-                    : '<small style="color:#2b6cb0;">Sin materias desaprobadas</small>';
-
-                let columnaDirectivaHTML = '';
-                if(esDirectivoSecretaria) {
-                    columnaDirectivaHTML = `
-                        <td class="no-print">
-                            <button class="btn btn-warning btn-sm" onclick="editarAlumnoUrgente(${a.id})" title="Modificar datos">✏ Editar</button>
-                            <button class="btn btn-danger btn-sm" onclick="eliminarAlumnoUrgente(${a.id})" title="Eliminar registro">🗑 Borrar</button>
-                        </td>`;
-                }
-
-                const tr = document.createElement('tr');
-                if(esRiesgoCritico) tr.classList.add('status-danger');
-
-                tr.innerHTML = `
-                    <td style="text-align:left;">
-                        <b>${a.nombre}</b>
-                        ${listaNotasConObservacionHTML}
-                    </td>
-                    <td><b>${a.anoLectivo}</b></td>
-                    ${inputsMateriasHTML}
-                    <td>${listaAdeudadasHTML}</td>
-                    <td>
-                        ${listaRiesgoHTML}
-                        ${esRiesgoCritico ? '<br><small style="color:#e53e3e; font-weight:bold;">⚠ Alerta Repitencia</small>' : ''}
-                    </td>
-                    ${columnaDirectivaHTML}
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function actualizarNotaMemoria(alumnoId, materia, trimIndex, valor) {
-            const alumno = alumnosDB.find(a => a.id === alumnoId);
-            if(alumno) {
-                if(!alumno.notas) alumno.notas = {};
-                if(!alumno.notas[materia]) alumno.notas[materia] = [null, null, null];
-                alumno.notas[materia][trimIndex] = valor !== '' ? parseFloat(valor) : null;
-
-                const notaKey = `${materia}_${trimIndex}`;
-                if(usuarioActual && usuarioActual.esAutorizadoEditarHistorico && alumno.observaciones && alumno.observaciones[notaKey]) {
-                    delete alumno.observaciones[notaKey];
-                }
-
-                guardarAlumnosEnStorage();
-            }
-        }
-
-        function guardarAlumnosEnStorage() {
-            localStorage.setItem('alumnos_colegio', JSON.stringify(alumnosDB));
-        }
-
-        function guardarNotasMemoria() {
-            guardarAlumnosEnStorage();
-            cargarTabla();
-            alert('✅ Calificaciones guardadas.');
-        }
-    </script>
-</body>
-</html>
