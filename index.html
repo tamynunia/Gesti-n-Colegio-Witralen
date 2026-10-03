@@ -1,10 +1,9 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión Académica - Colegio Witralén</title>
+    <title>Sistema de Gestión Académica - La Pampa</title>
     <style>
         :root {
             --primary: #1a365d;
@@ -25,7 +24,6 @@
             color: var(--dark);
         }
 
-        /* Nav & Header */
         header {
             background-color: var(--primary);
             color: white;
@@ -44,12 +42,11 @@
         }
 
         .container {
-            max-width: 1250px;
+            max-width: 1400px;
             margin: 20px auto;
             padding: 0 15px;
         }
 
-        /* Modal / Formulario Auth */
         .auth-card {
             background: white;
             max-width: 480px;
@@ -93,14 +90,14 @@
 
         .form-control {
             width: 100%;
-            padding: 10px;
+            padding: 9px;
             border: 1px solid #cbd5e0;
             border-radius: 6px;
             box-sizing: border-box;
         }
 
         .btn {
-            padding: 10px 18px;
+            padding: 9px 16px;
             border: none;
             border-radius: 6px;
             font-weight: bold;
@@ -114,12 +111,11 @@
         .btn-danger { background: var(--danger); color: white; }
         .btn-block { width: 100%; }
 
-        /* Dashboard */
         .dashboard-header {
             background: white;
-            padding: 20px;
+            padding: 15px 20px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
@@ -129,11 +125,19 @@
 
         .filters-group {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
-        /* Tabla de Calificaciones */
+        .section-box {
+            background: white;
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
         .table-container {
             background: white;
             border-radius: 8px;
@@ -144,13 +148,13 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.95em;
+            font-size: 0.9em;
         }
 
         th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 12px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
         }
 
         th {
@@ -160,42 +164,51 @@
         }
 
         .input-nota {
-            width: 55px;
-            padding: 6px;
+            width: 45px;
+            padding: 5px;
             text-align: center;
             border: 1px solid #cbd5e0;
             border-radius: 4px;
         }
 
-        /* Celda de Adeudadas y Alerta */
-        .cell-adeuda {
-            max-width: 220px;
-            font-size: 0.88em;
+        .badge-materia {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            margin: 3px;
+            font-size: 0.85em;
         }
 
         .badge-adeuda {
             display: inline-block;
-            padding: 4px 8px;
+            padding: 3px 6px;
             border-radius: 4px;
             background: #edf2f7;
             color: #4a5568;
             margin: 2px;
-            font-weight: 600;
+            font-size: 0.82em;
+        }
+
+        .badge-riesgo {
+            display: inline-block;
+            padding: 3px 6px;
+            border-radius: 4px;
+            background: #feebc8;
+            color: #7b341e;
+            margin: 2px;
+            font-size: 0.82em;
+            font-weight: bold;
         }
 
         .status-danger {
             background-color: var(--danger-bg) !important;
-            color: #9b2c2c !important;
-            border: 1px solid #feb2b2;
-            font-weight: bold;
-            padding: 6px;
-            border-radius: 6px;
         }
 
         .hidden { display: none !important; }
 
         @media print {
-            header, .dashboard-header, .btn, .no-print { display: none !important; }
+            header, .dashboard-header, .section-box, .btn, .no-print { display: none !important; }
             body { background: white; }
             .table-container { box-shadow: none; }
         }
@@ -204,7 +217,7 @@
 <body>
 
     <header>
-        <h2>🏫 Gestión Académica - Colegio Witralén</h2>
+        <h2>🏫 Gestión Académica - Planes de Estudio</h2>
         <div id="userInfo" class="user-badge hidden">
             <span id="userName">Usuario</span> (<span id="userRole">Rol</span>)
             <button class="btn btn-danger" style="padding: 3px 8px; margin-left: 10px;" onclick="cerrarSesion()">Salir</button>
@@ -213,17 +226,16 @@
 
     <div class="container">
 
-        <!-- SECCIÓN DE AUTENTICACIÓN / REGISTRO -->
+        <!-- ACCESO AL SISTEMA -->
         <div id="authSection" class="auth-card">
             <div class="auth-tabs">
                 <button class="auth-tab-btn active" onclick="switchAuthTab('login')">Iniciar Sesión</button>
                 <button class="auth-tab-btn" onclick="switchAuthTab('register')">Registrar Auxiliar</button>
             </div>
 
-            <!-- Formulario Login -->
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label>Tipo de Usuario / Perfil</label>
+                    <label>Perfil / Rol</label>
                     <select id="loginRole" class="form-control" onchange="toggleMasterKeyInput()">
                         <option value="auxiliar">Auxiliar Docente / Preceptor</option>
                         <option value="directivo">Directivo (Pase Libre)</option>
@@ -239,48 +251,121 @@
                 <div class="form-group">
                     <label id="passLabel">Contraseña / Código Único</label>
                     <input type="password" id="loginPass" class="form-control" placeholder="••••••••" required>
-                    <small id="passHelp" style="color: #718096; display:none;">Clave Maestra Directivos: <b>DIRECTOR2026</b> | Secretaría: <b>SECRETARIA2026</b></small>
+                    <small id="passHelp" style="color: #718096; display:none;">Clave Directivos: <b>DIRECTOR2026</b> | Secretaría: <b>SECRETARIA2026</b></small>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">Ingresar al Sistema</button>
+                <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
             </form>
 
-            <!-- Formulario Registro Auxiliares -->
             <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
                 <div class="form-group">
                     <label>Nombre y Apellido</label>
-                    <input type="text" id="regNombre" class="form-control" required placeholder="Ej. Ana García">
-                </div>
-                <div class="form-group">
-                    <label>Cargo / Función</label>
-                    <input type="text" id="regCargo" class="form-control" value="Auxiliar Docente / Preceptor" readonly>
+                    <input type="text" id="regNombre" class="form-control" required placeholder="Ej. Roberto Gómez">
                 </div>
                 <div class="form-group">
                     <label>DNI / Legajo</label>
-                    <input type="text" id="regDni" class="form-control" required placeholder="Número de documento">
+                    <input type="text" id="regDni" class="form-control" required placeholder="Número de DNI">
                 </div>
                 <div class="form-group">
-                    <label>Curso y Turno a Cargo</label>
+                    <label>Curso a Cargo</label>
                     <select id="regCurso" class="form-control">
-                        <option value="1_M">1° Año - Turno Mañana</option>
-                        <option value="2_M">2° Año - Turno Mañana</option>
-                        <option value="3_M">3° Año - Turno Mañana</option>
-                        <option value="1_T">1° Año - Turno Tarde</option>
-                        <option value="2_T">2° Año - Turno Tarde</option>
-                        <option value="3_T">3° Año - Turno Tarde</option>
+                        <option value="1_M">1° Año - Mañana</option>
+                        <option value="2_M">2° Año - Mañana</option>
+                        <option value="3_M">3° Año - Mañana (Ciclo Básico)</option>
+                        <option value="4_M">4° Año - Mañana</option>
+                        <option value="5_M">5° Año - Mañana</option>
+                        <option value="6_M">6° Año - Mañana</option>
+                        <option value="1_T">1° Año - Tarde</option>
+                        <option value="2_T">2° Año - Tarde</option>
+                        <option value="3_T">3° Año - Tarde (Ciclo Básico)</option>
+                        <option value="4_T">4° Año - Tarde</option>
+                        <option value="5_T">5° Año - Tarde</option>
+                        <option value="6_T">6° Año - Tarde</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Crear Código / Clave Personal</label>
-                    <input type="password" id="regPass" class="form-control" required placeholder="Clave personal">
+                    <label>Crear Clave Personal</label>
+                    <input type="password" id="regPass" class="form-control" required placeholder="Su contraseña">
                 </div>
-                <button type="submit" class="btn btn-success btn-block">Completar Registro</button>
+                <button type="submit" class="btn btn-success btn-block">Registrar Auxiliar</button>
             </form>
         </div>
 
-        <!-- DASHBOARD DE GESTIÓN ACADÉMICA -->
+        <!-- DASHBOARD -->
         <div id="dashboardSection" class="hidden">
             
+            <!-- CONFIGURACIÓN DE PLAN DE ESTUDIOS POR AÑO -->
+            <div class="section-box no-print">
+                <h4 style="margin-top:0; color: var(--primary);">📚 Plan de Estudios del Colegio (Configuración Única)</h4>
+                <p style="font-size:0.85em; color:#718096; margin-top:-8px;">Define o modifica las materias por curso. Se guardan para todos los preceptores y nuevos años lectivos.</p>
+                
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
+                    <div style="flex: 1; min-width: 150px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Seleccionar Curso:</label>
+                        <select id="configCursoSel" class="form-control" onchange="mostrarMateriasConfiguradas()">
+                            <option value="1">1° Año (Ciclo Básico)</option>
+                            <option value="2">2° Año (Ciclo Básico)</option>
+                            <option value="3">3° Año (Ciclo Básico)</option>
+                            <option value="4">4° Año (Orientado)</option>
+                            <option value="5">5° Año (Orientado)</option>
+                            <option value="6">6° Año (Orientado)</option>
+                        </select>
+                    </div>
+                    <div style="flex: 2; min-width: 250px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Agregar Nueva Materia al Curso:</label>
+                        <input type="text" id="nuevaMateriaNombre" class="form-control" placeholder="Ej: Física, Química, Biología, Construcción de Ciudadanía">
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="agregarMateriaAlPlan()">+ Guardar Materia</button>
+                    </div>
+                </div>
+
+                <div id="listaMateriasConfig" style="margin-top: 15px;">
+                    <!-- Badges de materias cargadas -->
+                </div>
+            </div>
+
+            <!-- REGISTRO DE ALUMNOS -->
+            <div class="section-box no-print">
+                <h4 style="margin-top:0; color: var(--primary);">➕ Ingreso Manual de Alumnos Nuevos</h4>
+                <form onsubmit="agregarAlumnoManual(event)" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+                    <div style="flex:2; min-width:180px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Nombre y Apellido</label>
+                        <input type="text" id="nuevoNombre" class="form-control" placeholder="Ej: Perez, Juan" required>
+                    </div>
+                    <div style="flex:1; min-width:90px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Año Ingreso</label>
+                        <input type="number" id="nuevoIngreso" class="form-control" value="2026" required>
+                    </div>
+                    <div style="flex:1; min-width:110px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Turno</label>
+                        <select id="nuevoTurno" class="form-control">
+                            <option value="M">Mañana</option>
+                            <option value="T">Tarde</option>
+                        </select>
+                    </div>
+                    <div style="flex:1; min-width:110px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Curso Actual</label>
+                        <select id="nuevoCurso" class="form-control">
+                            <option value="1">1° Año</option>
+                            <option value="2">2° Año</option>
+                            <option value="3">3° Año</option>
+                            <option value="4">4° Año</option>
+                            <option value="5">5° Año</option>
+                            <option value="6">6° Año</option>
+                        </select>
+                    </div>
+                    <div style="flex:3; min-width:220px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Materias Adeudadas (Separar por comas)</label>
+                        <input type="text" id="nuevoAdeudadas" class="form-control" placeholder="Ej: Matemática (1°), Lengua (2°)">
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-success">Registrar Alumno</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- CONTROLES DE LA GRILLA -->
             <div class="dashboard-header">
                 <div class="filters-group">
                     <div>
@@ -302,38 +387,31 @@
                         </select>
                     </div>
                     <div>
-                        <label><b>Materia:</b></label>
-                        <select id="filterMateria" class="form-control" onchange="cargarTabla()">
-                            <option value="Matemática">Matemática</option>
-                            <option value="Lengua">Lengua y Literatura</option>
-                            <option value="Historia">Historia</option>
-                            <option value="Física">Física</option>
+                        <label><b>Trimestre:</b></label>
+                        <select id="filterTrimestre" class="form-control" onchange="cargarTabla()">
+                            <option value="0">1° Trimestre</option>
+                            <option value="1">2° Trimestre</option>
+                            <option value="2">3° Trimestre</option>
                         </select>
                     </div>
                 </div>
 
                 <div>
-                    <button id="btnPrint" class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / Descargar Planilla</button>
-                    <button id="btnSave" class="btn btn-success" onclick="guardarNotas()">💾 Guardar Cambios</button>
+                    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+                    <button class="btn btn-success" onclick="guardarNotasMemoria()">💾 Guardar Calificaciones</button>
                 </div>
             </div>
 
-            <!-- Tabla principal -->
+            <!-- GRILLA DINÁMICA SEGÚN PLAN DE ESTUDIOS -->
             <div class="table-container">
                 <table>
                     <thead>
-                        <tr>
-                            <th>Alumno</th>
-                            <th>Año Ingreso</th>
-                            <th>1° Valoración</th>
-                            <th>2° Valoración</th>
-                            <th>3° Valoración</th>
-                            <th>Condición</th>
-                            <th>Materias Adeudadas (Años Anteriores)</th>
+                        <tr id="encabezadoTabla">
+                            <!-- Columnas dinámicas de materias -->
                         </tr>
                     </thead>
                     <tbody id="tablaCuerpo">
-                        <!-- Carga dinámica -->
+                        <!-- Filas de alumnos -->
                     </tbody>
                 </table>
             </div>
@@ -342,17 +420,23 @@
     </div>
 
     <script>
-        // BD Local en Memoria (Simulación)
-        let usuariosDB = JSON.parse(localStorage.getItem('usuarios_colegio')) || [];
-        let usuarioActual = null;
+        // PLAN DE ESTUDIOS POR DEFECTO (Se guarda en localStorage)
+        const planEstudiosPredeterminado = {
+            "1": ["Matemática", "Lengua", "Historia", "Geografía", "Biología", "Inglés"],
+            "2": ["Matemática", "Lengua", "Historia", "Física", "Biología", "Inglés"],
+            "3": ["Matemática", "Lengua", "Historia", "Química", "Física", "Inglés"],
+            "4": ["Matemática", "Lengua", "Historia", "Física", "Química", "Economía"],
+            "5": ["Matemática", "Lengua", "Filosofía", "Física", "Química", "Derecho"],
+            "6": ["Matemática", "Lengua", "Sociología", "Física", "Proyectos", "Inglés"]
+        };
 
-        // Estudiantes de muestra
-        let alumnosDB = [
-            { id: 101, nombre: "Pérez, Juan Martin", ingreso: 2023, curso: "3", turno: "M", adeudadas: ["Matemática (1°)", "Historia (2°)", "Física (2°)"], notas: { "Matemática": [6, 7, 8] } },
-            { id: 102, nombre: "Gómez, Sofía", ingreso: 2024, curso: "3", turno: "M", adeudadas: ["Lengua (1°)"], notas: { "Matemática": [8, 9, 9] } },
-            { id: 103, nombre: "Rodríguez, Lucas", ingreso: 2023, curso: "3", turno: "M", adeudadas: ["Matemática (1°)", "Inglés (1°)", "Química (2°)", "Historia (1°)"], notas: { "Matemática": [4, 5, 4] } },
-            { id: 104, nombre: "Fernández, Clara", ingreso: 2025, curso: "2", turno: "T", adeudadas: [], notas: { "Lengua": [9, 8, 10] } }
+        let planEstudios = JSON.parse(localStorage.getItem('plan_estudios_colegio')) || planEstudiosPredeterminado;
+        let usuariosDB = JSON.parse(localStorage.getItem('usuarios_colegio')) || [];
+        let alumnosDB = JSON.parse(localStorage.getItem('alumnos_colegio')) || [
+            { id: 101, nombre: "Pérez, Juan Martin", ingreso: 2024, curso: "1", turno: "M", adeudadas: ["Matemática (Escuela Primaria)"], notas: { "Matemática": [6, null, null], "Lengua": [7, null, null] } }
         ];
+
+        let usuarioActual = null;
 
         function switchAuthTab(tab) {
             document.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.remove('active'));
@@ -385,7 +469,7 @@
             e.preventDefault();
             const nuevoUser = {
                 nombre: document.getElementById('regNombre').value,
-                cargo: document.getElementById('regCargo').value,
+                cargo: 'Auxiliar Docente / Preceptor',
                 dni: document.getElementById('regDni').value,
                 curso: document.getElementById('regCurso').value,
                 pass: document.getElementById('regPass').value,
@@ -394,7 +478,7 @@
 
             usuariosDB.push(nuevoUser);
             localStorage.setItem('usuarios_colegio', JSON.stringify(usuariosDB));
-            alert('¡Registro exitoso! Ya puede iniciar sesión con sus datos.');
+            alert('¡Registro exitoso! Ya puede ingresar con sus datos.');
             switchAuthTab('login');
         }
 
@@ -413,11 +497,11 @@
                 if(user) {
                     usuarioActual = user;
                 } else {
-                    alert('DNI o Clave de Auxiliar incorrecta. Si es su primera vez, regístrese.');
+                    alert('DNI o Contraseña incorrecta.');
                     return;
                 }
             } else {
-                alert('Clave invalida.');
+                alert('Clave inválida.');
                 return;
             }
 
@@ -430,15 +514,15 @@
             document.getElementById('userInfo').classList.remove('hidden');
             
             document.getElementById('userName').innerText = usuarioActual.nombre;
-            document.getElementById('userRole').innerText = usuarioActual.role || usuarioActual.cargo;
+            document.getElementById('userRole').innerText = usuarioActual.role || 'Auxiliar';
 
-            // Si es auxiliar, bloquear/limitar controles al curso asignado
-            if(usuarioActual.role === 'auxiliar' || usuarioActual.cargo) {
+            if(usuarioActual.curso) {
                 const [curso, turno] = usuarioActual.curso.split('_');
                 document.getElementById('filterCurso').value = curso;
                 document.getElementById('filterTurno').value = turno;
             }
 
+            mostrarMateriasConfiguradas();
             cargarTabla();
         }
 
@@ -449,61 +533,167 @@
             document.getElementById('userInfo').classList.add('hidden');
         }
 
+        // FUNCIONES DE PLAN DE ESTUDIOS
+        function mostrarMateriasConfiguradas() {
+            const cursoSel = document.getElementById('configCursoSel').value;
+            const contenedor = document.getElementById('listaMateriasConfig');
+            const materias = planEstudios[cursoSel] || [];
+
+            contenedor.innerHTML = '<b>Materias del Plan de Estudios para ' + cursoSel + '° Año:</b><br>';
+            materias.forEach((m, index) => {
+                contenedor.innerHTML += `
+                    <span class="badge-materia">
+                        ${m} <a href="#" onclick="eliminarMateriaPlan('${cursoSel}', ${index})" style="color:red; text-decoration:none; font-weight:bold; margin-left:5px;">×</a>
+                    </span>`;
+            });
+        }
+
+        function agregarMateriaAlPlan() {
+            const cursoSel = document.getElementById('configCursoSel').value;
+            const nueva = document.getElementById('nuevaMateriaNombre').value.trim();
+
+            if(!nueva) return;
+
+            if(!planEstudios[cursoSel]) planEstudios[cursoSel] = [];
+            if(!planEstudios[cursoSel].includes(nueva)) {
+                planEstudios[cursoSel].push(nueva);
+                localStorage.setItem('plan_estudios_colegio', JSON.stringify(planEstudios));
+                document.getElementById('nuevaMateriaNombre').value = '';
+                mostrarMateriasConfiguradas();
+                cargarTabla();
+            }
+        }
+
+        function eliminarMateriaPlan(curso, index) {
+            planEstudios[curso].splice(index, 1);
+            localStorage.setItem('plan_estudios_colegio', JSON.stringify(planEstudios));
+            mostrarMateriasConfiguradas();
+            cargarTabla();
+        }
+
+        // REGISTRO Y CARGA DE TABLA
+        function agregarAlumnoManual(e) {
+            e.preventDefault();
+            const adeudadasTexto = document.getElementById('nuevoAdeudadas').value;
+            const adeudadasArray = adeudadasTexto ? adeudadasTexto.split(',').map(s => s.trim()) : [];
+
+            const nuevo = {
+                id: Date.now(),
+                nombre: document.getElementById('nuevoNombre').value,
+                ingreso: document.getElementById('nuevoIngreso').value,
+                turno: document.getElementById('nuevoTurno').value,
+                curso: document.getElementById('nuevoCurso').value,
+                adeudadas: adeudadasArray,
+                notas: {}
+            };
+
+            alumnosDB.push(nuevo);
+            guardarAlumnosEnStorage();
+            
+            document.getElementById('filterTurno').value = nuevo.turno;
+            document.getElementById('filterCurso').value = nuevo.curso;
+            
+            document.getElementById('nuevoNombre').value = '';
+            document.getElementById('nuevoAdeudadas').value = '';
+            
+            cargarTabla();
+            alert('Alumno registrado en el sistema.');
+        }
+
         function cargarTabla() {
             const turno = document.getElementById('filterTurno').value;
             const curso = document.getElementById('filterCurso').value;
-            const materia = document.getElementById('filterMateria').value;
+            const trimIndex = parseInt(document.getElementById('filterTrimestre').value);
 
-            const esDirectivo = !usuarioActual.role || usuarioActual.role.includes('Pase Libre');
+            const materiasDelCurso = planEstudios[curso] || [];
+            const headerTr = document.getElementById('encabezadoTabla');
             const tbody = document.getElementById('tablaCuerpo');
-            tbody.innerHTML = '';
 
+            // 1. Renderizar columnas del Plan de Estudios
+            let headerHTML = `<th style="text-align:left;">Alumno</th><th>Ingreso</th>`;
+            materiasDelCurso.forEach(m => {
+                headerHTML += `<th>${m}</th>`;
+            });
+            headerHTML += `<th>Materias Adeudadas</th><th>Proyección / Riesgo</th>`;
+            headerTr.innerHTML = headerHTML;
+
+            // 2. Cargar Alumnos
+            tbody.innerHTML = '';
             const filtrados = alumnosDB.filter(a => a.turno === turno && a.curso === curso);
 
             if(filtrados.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No hay alumnos registrados en ${curso}° Año - Turno ${turno === 'M' ? 'Mañana' : 'Tarde'}.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="${materiasDelCurso.length + 4}" style="text-align:center;">No hay alumnos registrados en ${curso}° Año - Turno ${turno === 'M' ? 'Mañana' : 'Tarde'}.</td></tr>`;
                 return;
             }
 
             filtrados.forEach(a => {
-                const notasMateria = (a.notas && a.notas[materia]) ? a.notas[materia] : ['-', '-', '-'];
-                const adeudadasCount = a.adeudadas.length;
-                
-                // Semáforo: 3 o más adeudadas = Alerta Roja
-                const esRiesgoRojo = adeudadasCount >= 3;
-                const claseAdeudada = esRiesgoRojo ? 'status-danger' : '';
+                let inputsMateriasHTML = '';
+                let riesgoFuturo = [];
 
-                const listaAdeudadasHTML = adeudadasCount > 0 
-                    ? a.adeudadas.map(m => `<span class="badge-adeuda">${m}</span>`).join(' ') 
-                    : '<small style="color:#38a169;">Sin adeudadas</small>';
+                materiasDelCurso.forEach(mat => {
+                    if(!a.notas) a.notas = {};
+                    const notas = a.notas[mat] || [null, null, null];
+                    const valorActual = (notas[trimIndex] !== null && notas[trimIndex] !== undefined) ? notas[trimIndex] : '';
+                    
+                    if(valorActual !== '' && parseFloat(valorActual) < 6) {
+                        riesgoFuturo.push(mat);
+                    }
+
+                    inputsMateriasHTML += `
+                        <td>
+                            <input type="number" class="input-nota" min="1" max="10" 
+                                   value="${valorActual}" 
+                                   onchange="actualizarNotaMemoria(${a.id}, '${mat}', ${trimIndex}, this.value)">
+                        </td>`;
+                });
+
+                const totalAdeudadasPrevias = a.adeudadas.length;
+                const totalRiesgoActual = riesgoFuturo.length;
+                const esRiesgoCritico = (totalAdeudadasPrevias + totalRiesgoActual) >= 3;
+
+                const listaAdeudadasHTML = totalAdeudadasPrevias > 0 
+                    ? a.adeudadas.map(m => `<span class="badge-adeuda">${m}</span>`).join('') 
+                    : '<small style="color:#38a169;">Al día</small>';
+
+                const listaRiesgoHTML = totalRiesgoActual > 0
+                    ? riesgoFuturo.map(m => `<span class="badge-riesgo">Riesgo: ${m}</span>`).join('')
+                    : '<small style="color:#2b6cb0;">Sin materias desaprobadas</small>';
 
                 const tr = document.createElement('tr');
+                if(esRiesgoCritico) tr.classList.add('status-danger');
+
                 tr.innerHTML = `
-                    <td><b>${a.nombre}</b></td>
+                    <td style="text-align:left;"><b>${a.nombre}</b></td>
                     <td>${a.ingreso}</td>
-                    <td><input type="text" class="input-nota" value="${notasMateria[0]}" ${!esDirectivo ? '' : 'disabled'}></td>
-                    <td><input type="text" class="input-nota" value="${notasMateria[1]}" ${!esDirectivo ? '' : 'disabled'}></td>
-                    <td><input type="text" class="input-nota" value="${notasMateria[2]}" ${!esDirectivo ? '' : 'disabled'}></td>
-                    <td><b>${calcularPromedio(notasMateria)}</b></td>
-                    <td class="cell-adeuda ${claseAdeudada}">
-                        <b>${adeudadasCount} materia(s)</b><br>
-                        ${listaAdeudadasHTML}
-                        ${esRiesgoRojo ? '<br>⚠️ <b>ALERTA DE RIESGO</b>' : ''}
+                    ${inputsMateriasHTML}
+                    <td>${listaAdeudadasHTML}</td>
+                    <td>
+                        ${listaRiesgoHTML}
+                        ${esRiesgoCritico ? '<br><small style="color:#e53e3e; font-weight:bold;">⚠️️ Alerta de Permanente / Repitencia</small>' : ''}
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        function calcularPromedio(notas) {
-            const num = notas.map(n => parseFloat(n)).filter(n => !isNaN(n));
-            if(num.length === 0) return '-';
-            const sum = num.reduce((a, b) => a + b, 0);
-            return (sum / num.length).toFixed(1);
+        function actualizarNotaMemoria(alumnoId, materia, trimIndex, valor) {
+            const alumno = alumnosDB.find(a => a.id === alumnoId);
+            if(alumno) {
+                if(!alumno.notas) alumno.notas = {};
+                if(!alumno.notas[materia]) alumno.notas[materia] = [null, null, null];
+                alumno.notas[materia][trimIndex] = valor !== '' ? parseFloat(valor) : null;
+                guardarAlumnosEnStorage();
+            }
         }
 
-        function guardarNotas() {
-            alert('✅ Las valoraciones y cambios han sido guardados correctamente.');
+        function guardarAlumnosEnStorage() {
+            localStorage.setItem('alumnos_colegio', JSON.stringify(alumnosDB));
+        }
+
+        function guardarNotasMemoria() {
+            guardarAlumnosEnStorage();
+            cargarTabla();
+            alert('✅ Registro guardado con éxito.');
         }
     </script>
 </body>
