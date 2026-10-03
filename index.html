@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión Académica - La Pampa</title>
+    <title>Sistema de Gestión Académica e Histórico - La Pampa</title>
     <style>
         :root {
             --primary: #1a365d;
@@ -109,7 +109,7 @@
         .btn-primary:hover { background: #2c5282; }
         .btn-success { background: #38a169; color: white; }
         .btn-danger { background: var(--danger); color: white; }
-        .btn-block { width: 100%; }
+        .btn-warning { background: var(--warning); color: white; }
 
         .dashboard-header {
             background: white;
@@ -171,6 +171,13 @@
             border-radius: 4px;
         }
 
+        .input-nota:disabled {
+            background-color: #edf2f7;
+            color: #718096;
+            cursor: not-allowed;
+            border-color: #e2e8f0;
+        }
+
         .badge-materia {
             display: inline-block;
             padding: 4px 8px;
@@ -201,6 +208,19 @@
             font-weight: bold;
         }
 
+        .banner-readonly {
+            background-color: #fffaf0;
+            border: 1px solid #fbd38d;
+            color: #c05621;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .status-danger {
             background-color: var(--danger-bg) !important;
         }
@@ -208,7 +228,7 @@
         .hidden { display: none !important; }
 
         @media print {
-            header, .dashboard-header, .section-box, .btn, .no-print { display: none !important; }
+            header, .dashboard-header, .section-box, .btn, .banner-readonly, .no-print { display: none !important; }
             body { background: white; }
             .table-container { box-shadow: none; }
         }
@@ -217,7 +237,7 @@
 <body>
 
     <header>
-        <h2>🏫 Gestión Académica - Planes de Estudio</h2>
+        <h2>🏫 Gestión Académica e Historial - La Pampa</h2>
         <div id="userInfo" class="user-badge hidden">
             <span id="userName">Usuario</span> (<span id="userRole">Rol</span>)
             <button class="btn btn-danger" style="padding: 3px 8px; margin-left: 10px;" onclick="cerrarSesion()">Salir</button>
@@ -238,8 +258,8 @@
                     <label>Perfil / Rol</label>
                     <select id="loginRole" class="form-control" onchange="toggleMasterKeyInput()">
                         <option value="auxiliar">Auxiliar Docente / Preceptor</option>
-                        <option value="directivo">Directivo (Pase Libre)</option>
-                        <option value="secretaria">Secretario/a (Pase Libre)</option>
+                        <option value="directivo">Directivo (Pase Libre / Edición Histórica)</option>
+                        <option value="secretaria">Secretario/a (Pase Libre / Carga Histórica)</option>
                     </select>
                 </div>
 
@@ -271,13 +291,13 @@
                     <select id="regCurso" class="form-control">
                         <option value="1_M">1° Año - Mañana</option>
                         <option value="2_M">2° Año - Mañana</option>
-                        <option value="3_M">3° Año - Mañana (Ciclo Básico)</option>
+                        <option value="3_M">3° Año - Mañana</option>
                         <option value="4_M">4° Año - Mañana</option>
                         <option value="5_M">5° Año - Mañana</option>
                         <option value="6_M">6° Año - Mañana</option>
                         <option value="1_T">1° Año - Tarde</option>
                         <option value="2_T">2° Año - Tarde</option>
-                        <option value="3_T">3° Año - Tarde (Ciclo Básico)</option>
+                        <option value="3_T">3° Año - Tarde</option>
                         <option value="4_T">4° Año - Tarde</option>
                         <option value="5_T">5° Año - Tarde</option>
                         <option value="6_T">6° Año - Tarde</option>
@@ -293,11 +313,16 @@
 
         <!-- DASHBOARD -->
         <div id="dashboardSection" class="hidden">
+
+            <!-- CARTEL MODO SOLO LECTURA EN AÑOS ANTERIORES -->
+            <div id="bannerReadOnly" class="banner-readonly hidden">
+                🔒 <b>Modo Consulta de Registro Histórico:</b> Estás viendo notas de un Año Lectivo anterior. Los registros están bloqueados para preceptores. Solo Directivos/Secretaría pueden modificarlos.
+            </div>
             
             <!-- CONFIGURACIÓN DE PLAN DE ESTUDIOS POR AÑO -->
             <div class="section-box no-print">
-                <h4 style="margin-top:0; color: var(--primary);">📚 Plan de Estudios del Colegio (Configuración Única)</h4>
-                <p style="font-size:0.85em; color:#718096; margin-top:-8px;">Define o modifica las materias por curso. Se guardan para todos los preceptores y nuevos años lectivos.</p>
+                <h4 style="margin-top:0; color: var(--primary);">📚 Plan de Estudios del Colegio (Registro Único)</h4>
+                <p style="font-size:0.85em; color:#718096; margin-top:-8px;">Las materias configuradas se aplican a los registros del año lectivo actual y pasado.</p>
                 
                 <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
                     <div style="flex: 1; min-width: 150px;">
@@ -313,7 +338,7 @@
                     </div>
                     <div style="flex: 2; min-width: 250px;">
                         <label style="font-size:0.85em; font-weight:bold;">Agregar Nueva Materia al Curso:</label>
-                        <input type="text" id="nuevaMateriaNombre" class="form-control" placeholder="Ej: Física, Química, Biología, Construcción de Ciudadanía">
+                        <input type="text" id="nuevaMateriaNombre" class="form-control" placeholder="Ej: Física, Química, Construcción de Ciudadanía">
                     </div>
                     <div>
                         <button class="btn btn-primary" onclick="agregarMateriaAlPlan()">+ Guardar Materia</button>
@@ -325,27 +350,33 @@
                 </div>
             </div>
 
-            <!-- REGISTRO DE ALUMNOS -->
+            <!-- REGISTRO DE ALUMNOS (O CARGA HISTÓRICA) -->
             <div class="section-box no-print">
-                <h4 style="margin-top:0; color: var(--primary);">➕ Ingreso Manual de Alumnos Nuevos</h4>
+                <h4 style="margin-top:0; color: var(--primary);">➕ Ingreso / Digitalización Histórica de Alumnos</h4>
                 <form onsubmit="agregarAlumnoManual(event)" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
                     <div style="flex:2; min-width:180px;">
                         <label style="font-size:0.85em; font-weight:bold;">Nombre y Apellido</label>
                         <input type="text" id="nuevoNombre" class="form-control" placeholder="Ej: Perez, Juan" required>
                     </div>
                     <div style="flex:1; min-width:90px;">
-                        <label style="font-size:0.85em; font-weight:bold;">Año Ingreso</label>
-                        <input type="number" id="nuevoIngreso" class="form-control" value="2026" required>
+                        <label style="font-size:0.85em; font-weight:bold;">Año Lectivo Registrado</label>
+                        <select id="nuevoAnoLectivo" class="form-control">
+                            <option value="2026">2026 (Actual)</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                        </select>
                     </div>
-                    <div style="flex:1; min-width:110px;">
+                    <div style="flex:1; min-width:100px;">
                         <label style="font-size:0.85em; font-weight:bold;">Turno</label>
                         <select id="nuevoTurno" class="form-control">
                             <option value="M">Mañana</option>
                             <option value="T">Tarde</option>
                         </select>
                     </div>
-                    <div style="flex:1; min-width:110px;">
-                        <label style="font-size:0.85em; font-weight:bold;">Curso Actual</label>
+                    <div style="flex:1; min-width:100px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Curso</label>
                         <select id="nuevoCurso" class="form-control">
                             <option value="1">1° Año</option>
                             <option value="2">2° Año</option>
@@ -356,18 +387,28 @@
                         </select>
                     </div>
                     <div style="flex:3; min-width:220px;">
-                        <label style="font-size:0.85em; font-weight:bold;">Materias Adeudadas (Separar por comas)</label>
-                        <input type="text" id="nuevoAdeudadas" class="form-control" placeholder="Ej: Matemática (1°), Lengua (2°)">
+                        <label style="font-size:0.85em; font-weight:bold;">Materias Adeudadas Previas</label>
+                        <input type="text" id="nuevoAdeudadas" class="form-control" placeholder="Ej: Matemática (1° Año)">
                     </div>
                     <div>
-                        <button type="submit" class="btn btn-success">Registrar Alumno</button>
+                        <button type="submit" class="btn btn-success">Registrar en Sistema</button>
                     </div>
                 </form>
             </div>
 
-            <!-- CONTROLES DE LA GRILLA -->
+            <!-- FILTROS Y CONTROLES DE NAVEGACIÓN TEMPORAL -->
             <div class="dashboard-header">
                 <div class="filters-group">
+                    <div>
+                        <label style="color:var(--danger); font-weight:bold;">📅 Año Lectivo:</label>
+                        <select id="filterAnoLectivo" class="form-control" style="font-weight:bold;" onchange="cargarTabla()">
+                            <option value="2026" selected>2026 (Lectivo Actual)</option>
+                            <option value="2025">2025 (Histórico)</option>
+                            <option value="2024">2024 (Histórico)</option>
+                            <option value="2023">2023 (Histórico)</option>
+                            <option value="2022">2022 (Histórico)</option>
+                        </select>
+                    </div>
                     <div>
                         <label><b>Turno:</b></label>
                         <select id="filterTurno" class="form-control" onchange="cargarTabla()">
@@ -397,8 +438,8 @@
                 </div>
 
                 <div>
-                    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
-                    <button class="btn btn-success" onclick="guardarNotasMemoria()">💾 Guardar Calificaciones</button>
+                    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / PDF</button>
+                    <button id="btnGuardarNotas" class="btn btn-success" onclick="guardarNotasMemoria()">💾 Guardar Calificaciones</button>
                 </div>
             </div>
 
@@ -407,7 +448,7 @@
                 <table>
                     <thead>
                         <tr id="encabezadoTabla">
-                            <!-- Columnas dinámicas de materias -->
+                            <!-- Columnas dinámicas -->
                         </tr>
                     </thead>
                     <tbody id="tablaCuerpo">
@@ -420,7 +461,9 @@
     </div>
 
     <script>
-        // PLAN DE ESTUDIOS POR DEFECTO (Se guarda en localStorage)
+        const ANIO_LECTIVO_ACTUAL = "2026";
+
+        // PLAN DE ESTUDIOS BASE POR DEFECTO
         const planEstudiosPredeterminado = {
             "1": ["Matemática", "Lengua", "Historia", "Geografía", "Biología", "Inglés"],
             "2": ["Matemática", "Lengua", "Historia", "Física", "Biología", "Inglés"],
@@ -432,8 +475,27 @@
 
         let planEstudios = JSON.parse(localStorage.getItem('plan_estudios_colegio')) || planEstudiosPredeterminado;
         let usuariosDB = JSON.parse(localStorage.getItem('usuarios_colegio')) || [];
+        
+        // BASE DE DATOS DE ALUMNOS CON REGISTROS POR AÑO LECTIVO
         let alumnosDB = JSON.parse(localStorage.getItem('alumnos_colegio')) || [
-            { id: 101, nombre: "Pérez, Juan Martin", ingreso: 2024, curso: "1", turno: "M", adeudadas: ["Matemática (Escuela Primaria)"], notas: { "Matemática": [6, null, null], "Lengua": [7, null, null] } }
+            { 
+                id: 101, 
+                nombre: "Pérez, Juan Martín", 
+                anoLectivo: "2026", 
+                curso: "1", 
+                turno: "M", 
+                adeudadas: ["Matemática (Primaria)"], 
+                notas: { "Matemática": [6, null, null], "Lengua": [7, null, null] } 
+            },
+            { 
+                id: 102, 
+                nombre: "Gómez, Maria Laura", 
+                anoLectivo: "2023", 
+                curso: "1", 
+                turno: "M", 
+                adeudadas: [], 
+                notas: { "Matemática": [8, 7, 9], "Lengua": [9, 8, 8], "Historia": [7, 8, 8] } 
+            }
         ];
 
         let usuarioActual = null;
@@ -488,14 +550,14 @@
             const pass = document.getElementById('loginPass').value;
 
             if(role === 'directivo' && pass === 'DIRECTOR2026') {
-                usuarioActual = { nombre: "Equipo Directivo", role: "Directivo (Pase Libre)" };
+                usuarioActual = { nombre: "Equipo Directivo", role: "Directivo", esAutorizadoEditarHistorico: true };
             } else if(role === 'secretaria' && pass === 'SECRETARIA2026') {
-                usuarioActual = { nombre: "Secretaría Académica", role: "Secretario/a (Pase Libre)" };
+                usuarioActual = { nombre: "Secretaría Académica", role: "Secretaría", esAutorizadoEditarHistorico: true };
             } else if(role === 'auxiliar') {
                 const dni = document.getElementById('loginDni').value;
                 const user = usuariosDB.find(u => u.dni === dni && u.pass === pass);
                 if(user) {
-                    usuarioActual = user;
+                    usuarioActual = { ...user, esAutorizadoEditarHistorico: false };
                 } else {
                     alert('DNI o Contraseña incorrecta.');
                     return;
@@ -533,7 +595,7 @@
             document.getElementById('userInfo').classList.add('hidden');
         }
 
-        // FUNCIONES DE PLAN DE ESTUDIOS
+        // GESTIÓN DEL PLAN DE ESTUDIOS
         function mostrarMateriasConfiguradas() {
             const cursoSel = document.getElementById('configCursoSel').value;
             const contenedor = document.getElementById('listaMateriasConfig');
@@ -571,7 +633,7 @@
             cargarTabla();
         }
 
-        // REGISTRO Y CARGA DE TABLA
+        // CARGA DE REGISTROS Y TABLA
         function agregarAlumnoManual(e) {
             e.preventDefault();
             const adeudadasTexto = document.getElementById('nuevoAdeudadas').value;
@@ -580,7 +642,7 @@
             const nuevo = {
                 id: Date.now(),
                 nombre: document.getElementById('nuevoNombre').value,
-                ingreso: document.getElementById('nuevoIngreso').value,
+                anoLectivo: document.getElementById('nuevoAnoLectivo').value,
                 turno: document.getElementById('nuevoTurno').value,
                 curso: document.getElementById('nuevoCurso').value,
                 adeudadas: adeudadasArray,
@@ -590,6 +652,7 @@
             alumnosDB.push(nuevo);
             guardarAlumnosEnStorage();
             
+            document.getElementById('filterAnoLectivo').value = nuevo.anoLectivo;
             document.getElementById('filterTurno').value = nuevo.turno;
             document.getElementById('filterCurso').value = nuevo.curso;
             
@@ -597,32 +660,48 @@
             document.getElementById('nuevoAdeudadas').value = '';
             
             cargarTabla();
-            alert('Alumno registrado en el sistema.');
+            alert('Registro guardado exitosamente.');
         }
 
         function cargarTabla() {
+            const anoLectivo = document.getElementById('filterAnoLectivo').value;
             const turno = document.getElementById('filterTurno').value;
             const curso = document.getElementById('filterCurso').value;
             const trimIndex = parseInt(document.getElementById('filterTrimestre').value);
+
+            // CONTROL DE MODO LECTURA
+            const esAnoAnterior = anoLectivo !== ANIO_LECTIVO_ACTUAL;
+            const puedeModificar = !esAnoAnterior || (usuarioActual && usuarioActual.esAutorizadoEditarHistorico);
+
+            const banner = document.getElementById('bannerReadOnly');
+            const btnGuardar = document.getElementById('btnGuardarNotas');
+
+            if (!puedeModificar) {
+                banner.classList.remove('hidden');
+                btnGuardar.classList.add('hidden');
+            } else {
+                banner.classList.add('hidden');
+                btnGuardar.classList.remove('hidden');
+            }
 
             const materiasDelCurso = planEstudios[curso] || [];
             const headerTr = document.getElementById('encabezadoTabla');
             const tbody = document.getElementById('tablaCuerpo');
 
-            // 1. Renderizar columnas del Plan de Estudios
-            let headerHTML = `<th style="text-align:left;">Alumno</th><th>Ingreso</th>`;
+            // 1. Columnas
+            let headerHTML = `<th style="text-align:left;">Alumno</th><th>Año Lectivo</th>`;
             materiasDelCurso.forEach(m => {
                 headerHTML += `<th>${m}</th>`;
             });
-            headerHTML += `<th>Materias Adeudadas</th><th>Proyección / Riesgo</th>`;
+            headerHTML += `<th>Materias Previsas</th><th>Proyección / Riesgo</th>`;
             headerTr.innerHTML = headerHTML;
 
-            // 2. Cargar Alumnos
+            // 2. Alumnos filtrados
             tbody.innerHTML = '';
-            const filtrados = alumnosDB.filter(a => a.turno === turno && a.curso === curso);
+            const filtrados = alumnosDB.filter(a => a.anoLectivo === anoLectivo && a.turno === turno && a.curso === curso);
 
             if(filtrados.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="${materiasDelCurso.length + 4}" style="text-align:center;">No hay alumnos registrados en ${curso}° Año - Turno ${turno === 'M' ? 'Mañana' : 'Tarde'}.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="${materiasDelCurso.length + 4}" style="text-align:center;">No hay registros cargados para el Año ${anoLectivo} - ${curso}° Año (${turno === 'M' ? 'Mañana' : 'Tarde'}).</td></tr>`;
                 return;
             }
 
@@ -639,10 +718,12 @@
                         riesgoFuturo.push(mat);
                     }
 
+                    const disabledAttr = puedeModificar ? '' : 'disabled';
+
                     inputsMateriasHTML += `
                         <td>
                             <input type="number" class="input-nota" min="1" max="10" 
-                                   value="${valorActual}" 
+                                   value="${valorActual}" ${disabledAttr}
                                    onchange="actualizarNotaMemoria(${a.id}, '${mat}', ${trimIndex}, this.value)">
                         </td>`;
                 });
@@ -664,12 +745,12 @@
 
                 tr.innerHTML = `
                     <td style="text-align:left;"><b>${a.nombre}</b></td>
-                    <td>${a.ingreso}</td>
+                    <td><b>${a.anoLectivo}</b></td>
                     ${inputsMateriasHTML}
                     <td>${listaAdeudadasHTML}</td>
                     <td>
                         ${listaRiesgoHTML}
-                        ${esRiesgoCritico ? '<br><small style="color:#e53e3e; font-weight:bold;">⚠️️ Alerta de Permanente / Repitencia</small>' : ''}
+                        ${esRiesgoCritico ? '<br><small style="color:#e53e3e; font-weight:bold;">⚠ Alerta Repitencia / Permanencia</small>' : ''}
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -693,7 +774,7 @@
         function guardarNotasMemoria() {
             guardarAlumnosEnStorage();
             cargarTabla();
-            alert('✅ Registro guardado con éxito.');
+            alert('✅ Registro guardado exitosamente.');
         }
     </script>
 </body>
