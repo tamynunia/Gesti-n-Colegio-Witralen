@@ -10,15 +10,14 @@
             --secondary: #2b6cb0;
             --accent: #319795;
             --danger: #e53e3e;
-            --danger-bg: #fed7d7;
+            --success: #38a169;
             --warning: #dd6b20;
-            --warning-bg: #feebc8;
             --light: #f7fafc;
             --dark: #2d3748;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #edf2f7;
@@ -35,26 +34,31 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+        header h2 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
         .user-badge {
-            background-color: rgba(255,255,255,0.15);
+            background-color: rgba(255,255,255,0.2);
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.9em;
         }
 
         .container {
-            max-width: 1500px;
-            margin: 20px auto;
+            max-width: 1200px;
+            margin: 30px auto;
             padding: 0 15px;
         }
 
         .auth-card {
             background: white;
-            max-width: 500px;
-            margin: 40px auto;
+            max-width: 480px;
+            margin: 20px auto;
             padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .auth-tabs {
@@ -65,12 +69,14 @@
 
         .auth-tab-btn {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: none;
             background: none;
             font-weight: bold;
             cursor: pointer;
             color: #718096;
+            font-size: 1rem;
+            transition: all 0.2s;
         }
 
         .auth-tab-btn.active {
@@ -91,51 +97,36 @@
 
         .form-control {
             width: 100%;
-            padding: 9px;
+            padding: 10px;
             border: 1px solid #cbd5e0;
             border-radius: 6px;
             box-sizing: border-box;
+            font-size: 0.95rem;
         }
 
         .btn {
-            padding: 8px 14px;
+            padding: 10px 16px;
             border: none;
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 0.85em;
+            font-size: 0.9rem;
+            display: inline-block;
+            text-align: center;
         }
 
         .btn-primary { background: var(--secondary); color: white; }
         .btn-primary:hover { background: #2c5282; }
-        .btn-success { background: #38a169; color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { background: #2f855a; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-warning { background: var(--warning); color: white; }
-        .btn-sm { padding: 4px 8px; font-size: 0.75em; }
-
-        .dashboard-header {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .filters-group {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+        .btn-sm { padding: 5px 10px; font-size: 0.8em; }
 
         .section-box {
             background: white;
-            padding: 18px;
+            padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.05);
@@ -166,64 +157,32 @@
             font-weight: 700;
         }
 
-        .cell-nota-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-        }
-
         .input-nota {
-            width: 60px;
-            padding: 5px;
+            width: 55px;
+            padding: 6px;
             text-align: center;
             border: 1px solid #cbd5e0;
             border-radius: 4px;
+            font-size: 0.9rem;
             text-transform: uppercase;
-        }
-
-        .input-nota:disabled {
-            background-color: #edf2f7;
-            color: #718096;
-            cursor: not-allowed;
-            border-color: #e2e8f0;
-        }
-
-        .badge-materia {
-            display: inline-block;
-            padding: 4px 8px;
-            background: #e2e8f0;
-            border-radius: 12px;
-            margin: 3px;
-            font-size: 0.85em;
-        }
-
-        .banner-readonly {
-            background-color: #fffaf0;
-            border: 1px solid #fbd38d;
-            color: #c05621;
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 0.9em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .hidden { display: none !important; }
 
-        @media print {
-            header, .dashboard-header, .section-box, .btn, .banner-readonly, .no-print { display: none !important; }
-            body { background: white; }
-            .table-container { box-shadow: none; }
+        .alert-box {
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
         }
+        .alert-success { background: #c6f6d5; color: #22543d; border: 1px solid #9ae6b4; }
+        .alert-danger { background: #fed7d7; color: #742a2a; border: 1px solid #feb2b2; }
     </style>
 </head>
 <body>
 
     <header>
-        <h2>🏫 Gestión Académica e Histórico - La Pampa</h2>
+        <h2>🏫 Gestión Académica - La Pampa</h2>
         <div id="userInfo" class="user-badge hidden">
             <span id="userName">Usuario</span> (<span id="userRole">Rol</span>)
             <button class="btn btn-danger btn-sm" style="margin-left: 10px;" onclick="cerrarSesion()">Salir</button>
@@ -232,18 +191,21 @@
 
     <div class="container">
 
-        <!-- ACCESO Y REGISTRO AL SISTEMA -->
+        <!-- MÓDULO DE ACCESO / REGISTRO -->
         <div id="authSection" class="auth-card">
+            
+            <div id="msgBox" class="hidden alert-box"></div>
+
             <div class="auth-tabs">
-                <button class="auth-tab-btn active" id="tabLoginBtn" onclick="switchAuthTab('login')">Iniciar Sesión</button>
-                <button class="auth-tab-btn" id="tabRegBtn" onclick="switchAuthTab('register')">Crear Cuenta</button>
+                <button type="button" class="auth-tab-btn active" id="tabLoginBtn" onclick="cambiarPestana('login')">Iniciar Sesión</button>
+                <button type="button" class="auth-tab-btn" id="tabRegBtn" onclick="cambiarPestana('register')">Crear Cuenta</button>
             </div>
 
-            <!-- LOGIN -->
-            <form id="loginForm" onsubmit="handleLogin(event)">
+            <!-- FORMULARIO LOGIN -->
+            <form id="loginForm" onsubmit="ejecutarLogin(event)">
                 <div class="form-group">
                     <label>DNI / Legajo</label>
-                    <input type="text" id="loginDni" class="form-control" placeholder="Ingrese su DNI" required>
+                    <input type="text" id="loginDni" class="form-control" placeholder="Ingrese su DNI sin puntos" required>
                 </div>
 
                 <div class="form-group">
@@ -253,223 +215,263 @@
 
                 <button type="submit" class="btn btn-primary" style="width:100%;">Ingresar al Sistema</button>
 
-                <div style="text-align: center; margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
-                    <a href="#" onclick="recuperarClave()" style="font-size: 0.85em; color: var(--secondary); text-decoration: none;">¿Olvidaste tu contraseña?</a>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="vaciarRegistroDNIs()">⚠️ Limpiar DNIs Registrados</button>
+                <div style="margin-top: 20px; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+                    <button type="button" class="btn btn-warning btn-sm" style="width:100%;" onclick="reiniciarDatos()">
+                        🔄 Reiniciar memoria (Borrar usuarios anteriores)
+                    </button>
                 </div>
             </form>
 
-            <!-- REGISTRO GENERAL CON CÓDIGO DE INVITACIÓN OPCIONAL -->
-            <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
+            <!-- FORMULARIO REGISTRO -->
+            <form id="registerForm" class="hidden" onsubmit="ejecutarRegistro(event)">
                 <div class="form-group">
-                    <label>Nombre y Apellido</label>
-                    <input type="text" id="regNombre" class="form-control" required placeholder="Ej. Roberto Gómez">
+                    <label>Nombre y Apellido Completo</label>
+                    <input type="text" id="regNombre" class="form-control" placeholder="Ej. Juan Pérez" required>
                 </div>
                 <div class="form-group">
-                    <label>Rol / Cargo Institucional</label>
-                    <select id="regRole" class="form-control" onchange="toggleRegCurso()">
-                        <option value="auxiliar">Auxiliar Docente / Preceptor</option>
+                    <label>Cargo / Rol Institucional</label>
+                    <select id="regRole" class="form-control">
+                        <option value="directivo">Equipo Directivo (Acceso Inmediato)</option>
                         <option value="secretaria">Secretario/a Académico/a</option>
-                        <option value="directivo">Equipo Directivo</option>
-                    </select>
-                </div>
-                <div class="form-group" id="regCursoGroup">
-                    <label>Curso a Cargo Inicial</label>
-                    <select id="regCurso" class="form-control">
-                        <option value="1_M">1° Año - Mañana</option>
-                        <option value="2_M">2° Año - Mañana</option>
-                        <option value="3_M">3° Año - Mañana</option>
-                        <option value="4_M">4° Año - Mañana</option>
-                        <option value="5_M">5° Año - Mañana</option>
-                        <option value="6_M">6° Año - Mañana</option>
-                        <option value="1_T">1° Año - Tarde</option>
-                        <option value="2_T">2° Año - Tarde</option>
-                        <option value="3_T">3° Año - Tarde</option>
-                        <option value="4_T">4° Año - Tarde</option>
-                        <option value="5_T">5° Año - Tarde</option>
-                        <option value="6_T">6° Año - Tarde</option>
+                        <option value="auxiliar">Auxiliar Docente / Preceptor</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>DNI / Legajo (Acceso Privado)</label>
-                    <input type="text" id="regDni" class="form-control" required placeholder="Número de DNI">
+                    <label>DNI / Legajo</label>
+                    <input type="text" id="regDni" class="form-control" placeholder="Número de DNI sin puntos" required>
                 </div>
                 <div class="form-group">
-                    <label>Correo Electrónico (Recuperación)</label>
-                    <input type="email" id="regEmail" class="form-control" required placeholder="ejemplo@correo.com">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="regEmail" class="form-control" placeholder="correo@ejemplo.com" required>
                 </div>
                 <div class="form-group">
-                    <label>Contraseña Personal</label>
-                    <input type="password" id="regPass" class="form-control" required placeholder="Su contraseña">
-                </div>
-                <div class="form-group">
-                    <label>Código de Invitación <small style="color:#718096;">(Opcional, dado por Directivo)</small></label>
-                    <input type="text" id="regCodigoInvitacion" class="form-control" placeholder="Ej: PROV-1234">
+                    <label>Crea tu Contraseña</label>
+                    <input type="password" id="regPass" class="form-control" placeholder="••••••••" required>
                 </div>
 
-                <button type="submit" class="btn btn-success" style="width:100%;">Solicitar Registro</button>
+                <button type="submit" class="btn btn-success" style="width:100%;">Registrarme Ahora</button>
             </form>
         </div>
 
-        <!-- DASHBOARD -->
+        <!-- PANEL DE CONTROL PRINCIPAL (DASHBOARD) -->
         <div id="dashboardSection" class="hidden">
-
-            <!-- CARTEL MODO SOLO LECTURA -->
-            <div id="bannerReadOnly" class="banner-readonly hidden">
-                🔒 <b>Modo Consulta de Registro Histórico:</b> Estás viendo notas de un Año Lectivo anterior. Solo Directivos o Secretaría pueden modificarlas.
-            </div>
-
-            <!-- MÓDULO EXCLUSIVO DIRECTIVO/SECRETARÍA: GESTIÓN DE USUARIOS -->
-            <div id="moduloGestionUsuarios" class="section-box no-print hidden">
-                <h4 style="margin-top:0; color: var(--primary);">🔐 Control Institucional de Accesos y Aprobaciones</h4>
-                <p style="font-size:0.85em; color:#718096; margin-top:-8px;">Aprobación de auxiliares registrados y generación de códigos de invitación.</p>
-                
-                <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap; align-items:center;">
-                    <button class="btn btn-primary" onclick="generarCodigoInvitacion()">🔑 Generar Código de Invitación Rápida</button>
-                    <span id="txtCodigoGenerado" style="font-weight:bold; color:var(--secondary);"></span>
-                    <button class="btn btn-danger" onclick="vaciarRegistroDNIs()" style="margin-left:auto;">🗑️ Resetear Todos los Usuarios/DNIs</button>
-                </div>
-
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Rol</th>
-                                <th>Curso Asignado</th>
-                                <th>Correo</th>
-                                <th>Estado</th>
-                                <th>Acción Directiva</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablaUsuariosCuerpo">
-                            <!-- Filas de usuarios -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- CONFIGURACIÓN DE PLAN DE ESTUDIOS -->
-            <div class="section-box no-print">
-                <h4 style="margin-top:0; color: var(--primary);">📚 Plan de Estudios del Colegio (Registro Único)</h4>
-                
-                <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
-                    <div style="flex: 1; min-width: 150px;">
-                        <label style="font-size:0.85em; font-weight:bold;">Seleccionar Curso:</label>
-                        <select id="configCursoSel" class="form-control" onchange="mostrarMateriasConfiguradas()">
-                            <option value="1">1° Año (Ciclo Básico)</option>
-                            <option value="2">2° Año (Ciclo Básico)</option>
-                            <option value="3">3° Año (Ciclo Básico)</option>
-                            <option value="4">4° Año (Orientado)</option>
-                            <option value="5">5° Año (Orientado)</option>
-                            <option value="6">6° Año (Orientado)</option>
-                        </select>
-                    </div>
-                    <div style="flex: 2; min-width: 250px;">
-                        <label style="font-size:0.85em; font-weight:bold;">Agregar Nueva Materia al Curso:</label>
-                        <input type="text" id="nuevaMateriaNombre" class="form-control" placeholder="Ej: Física, Química, Construcción de Ciudadanía">
-                    </div>
-                    <div>
-                        <button class="btn btn-primary" onclick="agregarMateriaAlPlan()">+ Guardar Materia</button>
-                    </div>
-                </div>
-
-                <div id="listaMateriasConfig" style="margin-top: 15px;">
-                    <!-- Badges de materias -->
-                </div>
+            <div class="section-box">
+                <h3 style="margin:0 0 5px 0; color: var(--primary);">Bienvenido/a al Sistema</h3>
+                <p style="margin:0; font-size:0.9em; color:#718096;">Has iniciado sesión correctamente.</p>
             </div>
 
             <!-- REGISTRO DE ALUMNOS -->
-            <div class="section-box no-print">
-                <h4 style="margin-top:0; color: var(--primary);">➕ Ingreso / Digitalización Histórica de Alumnos</h4>
-                <form onsubmit="agregarAlumnoManual(event)" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
-                    <div style="flex:2; min-width:180px;">
+            <div class="section-box">
+                <h4 style="margin-top:0; color: var(--primary);">➕ Cargar Alumno</h4>
+                <form onsubmit="agregarAlumno(event)" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+                    <div style="flex:2; min-width: 200px;">
                         <label style="font-size:0.85em; font-weight:bold;">Nombre y Apellido</label>
-                        <input type="text" id="nuevoNombre" class="form-control" placeholder="Ej: Pérez, Juan" required>
+                        <input type="text" id="alumnoNombre" class="form-control" placeholder="Ej: Gómez, Ana" required>
                     </div>
-                    <div style="flex:1; min-width:90px;">
+                    <div style="flex:1; min-width: 100px;">
                         <label style="font-size:0.85em; font-weight:bold;">Año Lectivo</label>
-                        <select id="nuevoAnoLectivo" class="form-control">
-                            <option value="2026">2026 (Actual)</option>
+                        <select id="alumnoAno" class="form-control">
+                            <option value="2026">2026</option>
                             <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
-                            <option value="2022">2022</option>
                         </select>
                     </div>
-                    <div style="flex:1; min-width:100px;">
-                        <label style="font-size:0.85em; font-weight:bold;">Turno</label>
-                        <select id="nuevoTurno" class="form-control">
-                            <option value="M">Mañana</option>
-                            <option value="T">Tarde</option>
-                        </select>
-                    </div>
-                    <div style="flex:1; min-width:100px;">
+                    <div style="flex:1; min-width: 100px;">
                         <label style="font-size:0.85em; font-weight:bold;">Curso</label>
-                        <select id="nuevoCurso" class="form-control">
+                        <select id="alumnoCurso" class="form-control">
                             <option value="1">1° Año</option>
                             <option value="2">2° Año</option>
                             <option value="3">3° Año</option>
-                            <option value="4">4° Año</option>
-                            <option value="5">5° Año</option>
-                            <option value="6">6° Año</option>
                         </select>
                     </div>
-                    <div style="flex:3; min-width:220px;">
-                        <label style="font-size:0.85em; font-weight:bold;">Materias Adeudadas Previas</label>
-                        <input type="text" id="nuevoAdeudadas" class="form-control" placeholder="Ej: Matemática (1° Año)">
-                    </div>
                     <div>
-                        <button type="submit" class="btn btn-success">Registrar en Sistema</button>
+                        <button type="submit" class="btn btn-success">Guardar Alumno</button>
                     </div>
                 </form>
             </div>
 
-            <!-- FILTROS Y CONTROLES -->
-            <div class="dashboard-header">
-                <div class="filters-group">
-                    <div>
-                        <label style="color:var(--danger); font-weight:bold;">📅 Año Lectivo:</label>
-                        <select id="filterAnoLectivo" class="form-control" style="font-weight:bold;" onchange="cargarTabla()">
-                            <option value="2026" selected>2026 (Lectivo Actual)</option>
-                            <option value="2025">2025 (Histórico)</option>
-                            <option value="2024">2024 (Histórico)</option>
-                            <option value="2023">2023 (Histórico)</option>
-                            <option value="2022">2022 (Histórico)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label><b>Turno:</b></label>
-                        <select id="filterTurno" class="form-control" onchange="cargarTabla()">
-                            <option value="M">Mañana</option>
-                            <option value="T">Tarde</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label><b>Curso:</b></label>
-                        <select id="filterCurso" class="form-control" onchange="cargarTabla()">
-                            <option value="1">1° Año</option>
-                            <option value="2">2° Año</option>
-                            <option value="3">3° Año</option>
-                            <option value="4">4° Año</option>
-                            <option value="5">5° Año</option>
-                            <option value="6">6° Año</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir Planilla</button>
+            <!-- PLANILLA DE NOTAS -->
+            <div class="section-box">
+                <h4 style="margin-top:0; color: var(--primary);">📋 Planilla de Calificaciones</h4>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Alumno</th>
+                                <th>Matemática</th>
+                                <th>Lengua</th>
+                                <th>Historia</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaAlumnosCuerpo">
+                            <!-- Filas dinámicas -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-            <!-- TABLA PRINCIPAL DE NOTAS -->
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr id="tablaEncabezado">
-                            <!-- Columnas dinámicas -->
-                        </tr>
-                    </thead>
-                    <tbody id="tablaCuerpo">
-                        <!-- Alumnos dinámicos -->
-                    </tbody>
+    </div>
+
+    <script>
+        // Variables de estado
+        let usuarioActual = null;
+        let baseUsuarios = JSON.parse(localStorage.getItem('sys_usuarios')) || [];
+        let baseAlumnos = JSON.parse(localStorage.getItem('sys_alumnos')) || [];
+
+        // Función para cambiar pestañas de Login / Registro
+        function cambiarPestana(pestana) {
+            ocultarMensaje();
+            const formLogin = document.getElementById('loginForm');
+            const formReg = document.getElementById('registerForm');
+            const btnLogin = document.getElementById('tabLoginBtn');
+            const btnReg = document.getElementById('tabRegBtn');
+
+            if (pestana === 'login') {
+                formLogin.classList.remove('hidden');
+                formReg.classList.add('hidden');
+                btnLogin.classList.add('active');
+                btnReg.classList.remove('active');
+            } else {
+                formLogin.classList.add('hidden');
+                formReg.classList.remove('hidden');
+                btnLogin.classList.remove('active');
+                btnReg.classList.add('active');
+            }
+        }
+
+        // Registrar nuevo usuario
+        function ejecutarRegistro(event) {
+            event.preventDefault();
+            
+            const dni = document.getElementById('regDni').value.trim();
+            const nombre = document.getElementById('regNombre').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const pass = document.getElementById('regPass').value;
+            const role = document.getElementById('regRole').value;
+
+            // Verificar si el DNI ya está guardado
+            const existe = baseUsuarios.some(u => u.dni === dni);
+            if (existe) {
+                mostrarMensaje('El DNI ingresado ya está registrado. Usa la pestaña Iniciar Sesión o haz clic en "Reiniciar memoria".', 'danger');
+                return;
+            }
+
+            const nuevoUsuario = { dni, nombre, email, pass, role };
+            baseUsuarios.push(nuevoUsuario);
+            localStorage.setItem('sys_usuarios', JSON.stringify(baseUsuarios));
+
+            mostrarMensaje('¡Cuenta creada con éxito! Ahora puedes iniciar sesión con tu DNI y contraseña.', 'success');
+            
+            // Limpiar campos y pasar a login
+            document.getElementById('registerForm').reset();
+            cambiarPestana('login');
+            document.getElementById('loginDni').value = dni;
+        }
+
+        // Iniciar sesión
+        function ejecutarLogin(event) {
+            event.preventDefault();
+
+            const dni = document.getElementById('loginDni').value.trim();
+            const pass = document.getElementById('loginPass').value;
+
+            const encontrado = baseUsuarios.find(u => u.dni === dni && u.pass === pass);
+
+            if (!encontrado) {
+                mostrarMensaje('DNI o contraseña incorrectos. Verifica tus datos o crea una cuenta nueva.', 'danger');
+                return;
+            }
+
+            usuarioActual = encontrado;
+            abrirDashboard();
+        }
+
+        // Mostrar u ocultar paneles
+        function abrirDashboard() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            document.getElementById('userInfo').classList.remove('hidden');
+
+            document.getElementById('userName').innerText = usuarioActual.nombre;
+            document.getElementById('userRole').innerText = usuarioActual.role.toUpperCase();
+
+            renderizarTabla();
+        }
+
+        function cerrarSesion() {
+            usuarioActual = null;
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('userInfo').classList.add('hidden');
+            ocultarMensaje();
+        }
+
+        // Cargar alumnos y notas
+        function agregarAlumno(e) {
+            e.preventDefault();
+            const nuevo = {
+                id: Date.now(),
+                nombre: document.getElementById('alumnoNombre').value.trim(),
+                ano: document.getElementById('alumnoAno').value,
+                curso: document.getElementById('alumnoCurso').value,
+                notas: {}
+            };
+
+            baseAlumnos.push(nuevo);
+            localStorage.setItem('sys_alumnos', JSON.stringify(baseAlumnos));
+            document.getElementById('alumnoNombre').value = '';
+            renderizarTabla();
+        }
+
+        function renderizarTabla() {
+            const tbody = document.getElementById('tablaAlumnosCuerpo');
+            tbody.innerHTML = '';
+
+            if (baseAlumnos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="color:#a0aec0;">No hay alumnos registrados aún.</td></tr>';
+                return;
+            }
+
+            baseAlumnos.forEach(al => {
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><b>${al.nombre}</b> <br><small style="color:#718096;">${al.curso}° Año (${al.ano})</small></td>
+                    <td><input type="text" class="input-nota" value="${al.notas['mat'] || ''}" onchange="guardarNota(${al.id}, 'mat', this.value)"></td>
+                    <td><input type="text" class="input-nota" value="${al.notas['len'] || ''}" onchange="guardarNota(${al.id}, 'len', this.value)"></td>
+                    <td><input type="text" class="input-nota" value="${al.notas['his'] || ''}" onchange="guardarNota(${al.id}, 'his', this.value)"></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function guardarNota(alumnoId, materia, valor) {
+            const al = baseAlumnos.find(a => a.id === alumnoId);
+            if (al) {
+                if (!al.notas) al.notas = {};
+                al.notas[materia] = valor.toUpperCase();
+                localStorage.setItem('sys_alumnos', JSON.stringify(baseAlumnos));
+            }
+        }
+
+        // Utilidades de mensajes y reinicio
+        function mostrarMensaje(texto, tipo) {
+            const box = document.getElementById('msgBox');
+            box.className = `alert-box alert-${tipo}`;
+            box.innerText = texto;
+            box.classList.remove('hidden');
+        }
+
+        function ocultarMensaje() {
+            document.getElementById('msgBox').classList.add('hidden');
+        }
+
+        function reiniciarDatos() {
+            if (confirm('¿Deseas borrar las cuentas guardadas para crear una nueva de cero?')) {
+                localStorage.removeItem('sys_usuarios');
+                baseUsuarios = [];
+                mostrarMensaje('Memoria reiniciada. Ya puedes crear tu cuenta.', 'success');
+            }
+        }
+    </script>
+</body>
+</html>
