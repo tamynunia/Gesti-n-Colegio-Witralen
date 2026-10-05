@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sistema de Gestión Académica - La Pampa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión Académica e Informes - La Pampa</title>
     <style>
         :root {
             --primary: #1a365d;
@@ -11,188 +11,165 @@
             --accent: #319795;
             --danger: #e53e3e;
             --warning: #dd6b20;
+            --success: #38a169;
             --light: #f7fafc;
             --dark: #2d3748;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
 
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #edf2f7;
-            color: var(--dark);
-        }
+        body { margin: 0; padding: 0; background-color: #edf2f7; color: var(--dark); }
 
         header {
             background-color: var(--primary);
             color: white;
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        header h2 {
-            font-size: 1.1rem;
-            margin: 0;
-        }
+        header h2 { font-size: 1.2rem; margin: 0; }
 
         .user-badge {
             background-color: rgba(255,255,255,0.2);
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.85em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 15px auto;
-            padding: 0 10px;
-        }
+        .container { max-width: 1300px; margin: 20px auto; padding: 0 15px; }
 
+        /* MÓDULO AUTH */
         .auth-card {
             background: white;
-            max-width: 450px;
-            margin: 20px auto;
-            padding: 20px;
+            max-width: 480px;
+            margin: 30px auto;
+            padding: 25px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e2e8f0;
-        }
+        .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; }
 
         .auth-tab-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: none;
-            font-weight: bold;
-            cursor: pointer;
-            color: #718096;
-            font-size: 0.95rem;
-            -webkit-tap-highlight-color: transparent;
+            flex: 1; padding: 12px; border: none; background: none;
+            font-weight: bold; cursor: pointer; color: #718096; font-size: 1rem;
         }
 
-        .auth-tab-btn.active {
-            color: var(--secondary);
-            border-bottom: 3px solid var(--secondary);
-        }
+        .auth-tab-btn.active { color: var(--secondary); border-bottom: 3px solid var(--secondary); }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            font-size: 0.9em;
-        }
+        /* BOTONES Y FORMULARIOS */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9em; }
 
         .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
-            font-size: 0.95rem;
+            width: 100%; padding: 9px 12px; border: 1px solid #cbd5e0;
+            border-radius: 6px; font-size: 0.95rem;
         }
 
         .btn {
-            padding: 10px 14px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.9rem;
-            display: inline-block;
-            text-align: center;
+            padding: 10px 16px; border: none; border-radius: 6px;
+            font-weight: bold; cursor: pointer; font-size: 0.9rem;
+            display: inline-flex; align-items: center; gap: 6px; justify-content: center;
+            transition: background-color 0.2s;
         }
 
         .btn-primary { background: var(--secondary); color: white; }
-        .btn-success { background: #38a169; color: white; }
+        .btn-primary:hover { background: #2c5282; }
+        .btn-success { background: var(--success); color: white; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-warning { background: var(--warning); color: white; }
+        .btn-outline { background: transparent; border: 1px solid #cbd5e0; color: var(--dark); }
         .btn-sm { padding: 5px 10px; font-size: 0.8em; }
 
-        .section-box {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
+        .grid-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
             margin-bottom: 15px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
+        .section-box {
+            background: white; padding: 20px; border-radius: 8px;
+            margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            margin-top: 0; color: var(--primary); font-size: 1.1rem;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #edf2f7; padding-bottom: 10px;
+        }
+
+        /* TABLA PRINCIPAL */
         .table-container {
-            background: white;
-            border-radius: 8px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            background: white; border-radius: 8px; overflow-x: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-top: 15px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85em;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
 
-        th, td {
-            padding: 8px 10px;
-            text-align: center;
-            border: 1px solid #e2e8f0;
-        }
+        th, td { padding: 10px 8px; text-align: center; border: 1px solid #e2e8f0; }
 
-        th {
-            background-color: #f7fafc;
-            color: var(--primary);
-            font-weight: 700;
-        }
+        th { background-color: #f7fafc; color: var(--primary); font-weight: 700; sticky: top; }
 
         .input-nota {
-            width: 50px;
-            padding: 5px;
-            text-align: center;
-            border: 1px solid #cbd5e0;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
+            width: 50px; padding: 5px; text-align: center;
+            border: 1px solid #cbd5e0; border-radius: 4px; font-size: 0.9rem;
+            text-transform: uppercase; font-weight: bold;
         }
+
+        .input-nota:focus { outline: 2px solid var(--secondary); border-color: transparent; }
+
+        .textarea-obs {
+            width: 100%; min-width: 150px; height: 35px; padding: 4px;
+            border: 1px solid #cbd5e0; border-radius: 4px; font-size: 0.8em; resize: vertical;
+        }
+
+        .status-badge {
+            padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.75em;
+        }
+        .status-aprobado { background: #c6f6d5; color: #22543d; }
+        .status-riesgo { background: #feebc8; color: #742a2a; }
+        .status-desaprobado { background: #fed7d7; color: #9b2c2c; }
 
         .hidden { display: none !important; }
 
         .alert-box {
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 0.85em;
+            padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85em;
         }
-        .alert-danger { background: #fed7d7; color: #9b2c2c; }
-        .alert-success { background: #c6f6d5; color: #22543d; }
+        .alert-danger { background: #fed7d7; color: #9b2c2c; border-left: 4px solid var(--danger); }
+        .alert-success { background: #c6f6d5; color: #22543d; border-left: 4px solid var(--success); }
+
+        /* IMPRESIÓN Y BOLETINES */
+        @media print {
+            header, .auth-card, .no-print, .btn, .grid-filters { display: none !important; }
+            body { background: white; }
+            .container { max-width: 100%; margin: 0; padding: 0; }
+            .section-box { box-shadow: none; padding: 0; border: none; }
+            .table-container { box-shadow: none; }
+            th, td { border: 1px solid #000; font-size: 10pt; }
+            .boletin-page { page-break-after: always; padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h2>🏫 Gestión Académica - La Pampa</h2>
+        <h2>🏫 Sistema de Gestión Académica - La Pampa</h2>
         <div id="userInfo" class="user-badge hidden">
             <span id="userName">Usuario</span>
-            <button class="btn btn-danger btn-sm" style="margin-left: 8px;" onclick="cerrarSesion()">Salir</button>
+            <button class="btn btn-danger btn-sm" onclick="cerrarSesion()">Salir</button>
         </div>
     </header>
 
     <div class="container">
 
-        <!-- MÓDULO REGISTRO / LOGIN -->
+        <!-- MÓDULO ACCESO Y REGISTRO -->
         <div id="authSection" class="auth-card">
             <div id="alertMsg" class="alert-box hidden"></div>
 
@@ -201,58 +178,266 @@
                 <button type="button" class="auth-tab-btn" id="tabRegBtn" onclick="cambiarTab('register')">Crear Cuenta</button>
             </div>
 
-            <!-- LOGIN -->
-            <div id="loginForm">
+            <!-- INICIAR SESIÓN -->
+            <form id="loginForm" onsubmit="iniciarSesion(event)">
                 <div class="form-group">
                     <label>DNI / Legajo</label>
-                    <input type="text" id="loginDni" class="form-control" placeholder="Ingrese su DNI">
+                    <input type="text" id="loginDni" class="form-control" placeholder="Ingrese su DNI" required>
                 </div>
-
                 <div class="form-group">
                     <label>Contraseña</label>
-                    <input type="password" id="loginPass" class="form-control" placeholder="••••••••">
+                    <input type="password" id="loginPass" class="form-control" placeholder="••••••••" required>
                 </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Ingresar al Sistema</button>
+            </form>
 
-                <button type="button" class="btn btn-primary" style="width:100%;" onclick="iniciarSesion()">Ingresar al Sistema</button>
-            </div>
-
-            <!-- REGISTRO -->
-            <div id="registerForm" class="hidden">
+            <!-- CREAR CUENTA -->
+            <form id="registerForm" class="hidden" onsubmit="crearCuenta(event)">
                 <div class="form-group">
                     <label>Nombre y Apellido</label>
-                    <input type="text" id="regNombre" class="form-control" placeholder="Ej. María López">
+                    <input type="text" id="regNombre" class="form-control" placeholder="Ej. Roberto Gómez" required>
                 </div>
                 <div class="form-group">
                     <label>Rol Institucional</label>
                     <select id="regRole" class="form-control">
                         <option value="Equipo Directivo">Equipo Directivo</option>
-                        <option value="Secretaría">Secretaría Académica</option>
-                        <option value="Docente / Preceptor">Docente / Preceptor</option>
+                        <option value="Secretaría Académica">Secretaría Académica</option>
+                        <option value="Preceptor/a">Preceptor/a</option>
+                        <option value="Docente">Docente</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>DNI</label>
-                    <input type="text" id="regDni" class="form-control" placeholder="Número de DNI">
+                    <input type="text" id="regDni" class="form-control" placeholder="Número de DNI" required>
                 </div>
                 <div class="form-group">
                     <label>Contraseña</label>
-                    <input type="password" id="regPass" class="form-control" placeholder="••••••••">
+                    <input type="password" id="regPass" class="form-control" placeholder="••••••••" required>
                 </div>
+                <button type="submit" class="btn btn-success" style="width:100%;">Crear mi Cuenta</button>
+            </form>
 
-                <button type="button" class="btn btn-success" style="width:100%;" onclick="crearCuenta()">Crear mi Cuenta</button>
-            </div>
-
-            <div style="margin-top:20px; border-top: 1px solid #e2e8f0; padding-top: 15px; text-align: center;">
-                <button type="button" class="btn btn-warning btn-sm" style="width:100%;" onclick="entrarDirecto()">
-                    ⚡ Entrar directo como invitado/a (Sin registrarte)
+            <div style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 15px; text-align: center;">
+                <button type="button" class="btn btn-warning btn-sm" style="width:100%;" onclick="desvincularCuentas()">
+                    🔄 Desvincular DNI anterior / Limpiar accesos
                 </button>
+                <p style="font-size: 0.75em; color: #718096; margin-top: 6px;">
+                    (Elimina el DNI viejo del navegador para que puedas crear o usar otra cuenta sin perder la lista de alumnos ni notas).
+                </p>
             </div>
         </div>
 
-        <!-- PANEL DE CONTROL (DASHBOARD) -->
+        <!-- PANEL DE CONTROL Y DASHBOARD PRINCIPAL -->
         <div id="dashboardSection" class="hidden">
-            <div class="section-box">
-                <h3 style="margin:0 0 5px 0; color: var(--primary);">Bienvenido/a al Sistema</h3>
-                <p style="margin:0; font-size:0.9em; color:#718096;">Gestión de Planillas y Carga de Calificaciones.</p>
+
+            <!-- BARRA DE HERRAMIENTAS Y ACCIONES GENERALES -->
+            <div class="section-box no-print">
+                <div class="section-title">
+                    <span>⚙️ Filtros de Navegación y Curso</span>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-outline btn-sm" onclick="exportarCSV()">📥 Exportar CSV</button>
+                        <button class="btn btn-outline btn-sm" onclick="imprimirPlanilla()">🖨️ Imprimir Planilla</button>
+                        <button class="btn btn-primary btn-sm" onclick="generarBoletinesModal()">📄 Generar Boletines</button>
+                    </div>
+                </div>
+
+                <div class="grid-filters" style="margin-top:15px;">
+                    <div>
+                        <label style="font-size:0.8em; font-weight:bold;">Ciclo Lectivo</label>
+                        <select id="filtroAno" class="form-control" onchange="cargarTabla()">
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size:0.8em; font-weight:bold;">Año / Curso</label>
+                        <select id="filtroCurso" class="form-control" onchange="cargarTabla()">
+                            <option value="Todos">Todos los Cursos</option>
+                            <option value="1° Año">1° Año</option>
+                            <option value="2° Año">2° Año</option>
+                            <option value="3° Año">3° Año</option>
+                            <option value="4° Año">4° Año</option>
+                            <option value="5° Año">5° Año</option>
+                            <option value="6° Año">6° Año</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size:0.8em; font-weight:bold;">División</label>
+                        <select id="filtroDivision" class="form-control" onchange="cargarTabla()">
+                            <option value="1°">1°</option>
+                            <option value="2°">2°</option>
+                            <option value="3°">3°</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size:0.8em; font-weight:bold;">Turno</label>
+                        <select id="filtroTurno" class="form-control" onchange="cargarTabla()">
+                            <option value="Mañana">Mañana</option>
+                            <option value="Tarde">Tarde</option>
+                            <option value="Vespertino">Vespertino</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-        
+
+            <!-- REGISTRO DE NUEVO ALUMNO -->
+            <div class="section-box no-print">
+                <div class="section-title">
+                    <span>➕ Inscripción / Alta de Alumno</span>
+                </div>
+                <form onsubmit="guardarAlumno(event)" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-top: 10px;">
+                    <div style="flex: 2; min-width: 200px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Apellido y Nombre</label>
+                        <input type="text" id="alumnoNombre" class="form-control" placeholder="Ej: Gómez, Ana María" required>
+                    </div>
+                    <div style="flex: 1; min-width: 120px;">
+                        <label style="font-size:0.85em; font-weight:bold;">DNI Alumno</label>
+                        <input type="text" id="alumnoDni" class="form-control" placeholder="DNI del estudiante">
+                    </div>
+                    <div style="flex: 1; min-width: 100px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Curso</label>
+                        <select id="alumnoCurso" class="form-control">
+                            <option value="1° Año">1° Año</option>
+                            <option value="2° Año">2° Año</option>
+                            <option value="3° Año">3° Año</option>
+                            <option value="4° Año">4° Año</option>
+                            <option value="5° Año">5° Año</option>
+                            <option value="6° Año">6° Año</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-success">Guardar Alumno</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- PLANILLA DE MATERIAS Y NOTAS -->
+            <div class="section-box">
+                <div class="section-title">
+                    <span>📋 Planilla Curricular Integrada</span>
+                    <span id="cantAlumnos" style="font-size:0.8em; color:#718096;">Alumnos: 0</span>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Estudiante</th>
+                                <th>Curso</th>
+                                <th>Inasist.</th>
+                                <th>Matemática</th>
+                                <th>Lengua / Lit.</th>
+                                <th>Historia</th>
+                                <th>Biología</th>
+                                <th>Inglés</th>
+                                <th>Geografía</th>
+                                <th>Promedio</th>
+                                <th>Estado</th>
+                                <th>Observaciones / Saberes Integrados</th>
+                                <th class="no-print">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaCuerpo">
+                            <!-- Filas generadas dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CONTENEDOR PARA VISTA PREVIA E IMPRESIÓN DE BOLETINES -->
+            <div id="boletinesContainer"></div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // ESTADO GLOBAL DE DATOS
+        let usuarios = JSON.parse(localStorage.getItem('colegio_usuarios')) || [];
+        let alumnos = JSON.parse(localStorage.getItem('colegio_alumnos')) || [];
+
+        // NAVEGACIÓN ENTRE TABS DE ACCESO
+        function cambiarTab(tab) {
+            ocultarAlerta();
+            if (tab === 'login') {
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('registerForm').classList.add('hidden');
+                document.getElementById('tabLoginBtn').classList.add('active');
+                document.getElementById('tabRegBtn').classList.remove('active');
+            } else {
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('registerForm').classList.remove('hidden');
+                document.getElementById('tabLoginBtn').classList.remove('active');
+                document.getElementById('tabRegBtn').classList.add('active');
+            }
+        }
+
+        // REGISTRO DE CUENTA
+        function crearCuenta(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('regNombre').value.trim();
+            const role = document.getElementById('regRole').value;
+            const dni = document.getElementById('regDni').value.trim();
+            const pass = document.getElementById('regPass').value.trim();
+
+            const existe = usuarios.some(u => u.dni === dni);
+            if (existe) {
+                mostrarAlerta('Este DNI ya figuraba registrado. Si tenés problemas para entrar, tocá "Desvincular DNI anterior" abajo.', 'danger');
+                return;
+            }
+
+            const nuevoUsuario = { nombre, role, dni, pass };
+            usuarios.push(nuevoUsuario);
+            localStorage.setItem('colegio_usuarios', JSON.stringify(usuarios));
+
+            mostrarAlerta('¡Cuenta creada exitosamente! Podés iniciar sesión.', 'success');
+            cambiarTab('login');
+            document.getElementById('loginDni').value = dni;
+        }
+
+        // INICIO DE SESIÓN
+        function iniciarSesion(e) {
+            e.preventDefault();
+            const dni = document.getElementById('loginDni').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            const user = usuarios.find(u => u.dni === dni && u.pass === pass);
+
+            if (!user) {
+                mostrarAlerta('DNI o contraseña incorrectos. Revisá tus datos o creá una cuenta.', 'danger');
+                return;
+            }
+
+            abrirDashboard(user.nombre, user.role);
+        }
+
+        function abrirDashboard(nombre, rol) {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            document.getElementById('userInfo').classList.remove('hidden');
+
+            document.getElementById('userName').innerText = `${nombre} (${rol})`;
+            cargarTabla();
+        }
+
+        function cerrarSesion() {
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('userInfo').classList.add('hidden');
+            ocultarAlerta();
+        }
+
+        // DESVINCULACIÓN Y LIMPIEZA DE CREDENCIALES VIEJAS
+        function desvincularCuentas() {
+            if (confirm('¿Querés limpiar las cuentas/DNIs registrados en este navegador? Tu lista de alumnos y notas NO se borrarán.')) {
+                localStorage.removeItem('colegio_usuarios');
+                usuarios = [];
+                mostrarAlerta('Credenciales eliminadas con éxito. Podés registrar tu DNI nuevamente.', 'success');
+            }
+        }
+
+        // ALTA DE ALUMNO
+        function guardarAlumno(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('alumnoNombre').value.trim();
+            const dni = docu
