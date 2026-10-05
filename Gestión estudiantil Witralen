@@ -3,411 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión Académica - Colegio</title>
-    <style>
-        :root {
-            --primary: #1a252f;
-            --secondary: #2980b9;
-            --success: #2ecc71;
-            --danger: #e74c3c;
-            --warning: #f1c40f;
-            --light: #f8f9fa;
-            --dark: #2c3e50;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            margin: 0;
-            background-color: #edf2f7;
-            color: #2d3748;
-        }
-
-        /* Encabezado y Login */
-        header {
-            background-color: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .badge-role {
-            background: #34495e;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.85em;
-            color: #f1c40f;
-            font-weight: bold;
-        }
-
-        /* Formularios y Modales */
-        .auth-container {
-            max-width: 500px;
-            margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: none;
-            font-weight: bold;
-            cursor: pointer;
-            color: #718096;
-        }
-
-        .auth-tab.active {
-            color: var(--secondary);
-            border-bottom: 3px solid var(--secondary);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
-        .btn {
-            background-color: var(--secondary);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-            transition: 0.2s;
-        }
-
-        .btn:hover { background-color: #1c5980; }
-        .btn-success { background-color: var(--success); }
-        .btn-success:hover { background-color: #27ae60; }
-        .btn-danger { background-color: var(--danger); width: auto; }
-
-        /* Panel Principal */
-        .main-panel {
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .top-controls {
-            display: flex;
-            justify-content: space-between;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        /* Tabla de Calificaciones */
-        .table-container {
-            background: white;
-            border-radius: 10px;
-            overflow-x: auto;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9em;
-        }
-
-        th, td {
-            padding: 12px 10px;
-            border: 1px solid #e2e8f0;
-            text-align: center;
-        }
-
-        th {
-            background-color: #f7fafc;
-            color: var(--dark);
-        }
-
-        .materia-header {
-            background-color: #ebf8ff;
-            color: #2b6cb0;
-        }
-
-        /* Alertas de Materias Adeudadas */
-        .row-alerta {
-            background-color: #fff5f5 !important;
-        }
-
-        .badge-adeuda {
-            background-color: #fed7d7;
-            color: #9b2c2c;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.85em;
-            display: block;
-            margin-top: 4px;
-        }
-
-        .badge-ok {
-            background-color: #c6f6d5;
-            color: #22543d;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: bold;
-        }
-
-        .input-nota {
-            width: 40px;
-            text-align: center;
-            padding: 4px;
-            border: 1px solid #cbd5e0;
-            border-radius: 4px;
-        }
-
-        .hidden { display: none !important; }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h2>🏫 Control Académico Colegio</h2>
-        <div class="user-info" id="userHeaderInfo">
-            <!-- Info del usuario logueado -->
-        </div>
-    </header>
-
-    <!-- PANTALLA DE ACCESO / REGISTRO -->
-    <div id="authSection" class="auth-container">
-        <div class="auth-tabs">
-            <button class="auth-tab active" onclick="switchAuthTab('login')">Ingresar</button>
-            <button class="auth-tab" onclick="switchAuthTab('register')">Registrar Auxiliar</button>
-        </div>
-
-        <!-- FORMULARIO LOGIN -->
-        <form id="loginForm" onsubmit="handleLogin(event)">
-            <div class="form-group">
-                <label>Tipo de Usuario:</label>
-                <select id="loginRole" onchange="toggleLoginInputs()">
-                    <option value="auxiliar">Auxiliar Docente / Preceptor</option>
-                    <option value="directivo">Directivo / Secretaría (Pase Libre)</option>
-                </select>
-            </div>
-
-            <div class="form-group" id="groupUserCode">
-                <label>Clave Personal / Código Único:</label>
-                <input type="password" id="loginCode" required placeholder="Ej: AUX123">
-            </div>
-
-            <div class="form-group hidden" id="groupMasterCode">
-                <label>Número Maestro (Directivos):</label>
-                <input type="password" id="loginMasterCode" placeholder="Ingrese Clave Maestra">
-                <small style="color: #718096;">Clave demo: <b>MAESTRO2026</b></small>
-            </div>
-
-            <button type="submit" class="btn">Ingresar al Sistema</button>
-        </form>
-
-        <!-- FORMULARIO REGISTRO (AUXILIARES) -->
-        <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
-            <div class="form-group">
-                <label>Nombre y Apellido:</label>
-                <input type="text" id="regName" required placeholder="Ej: Roberto Gómez">
-            </div>
-            <div class="form-group">
-                <label>Cargo:</label>
-                <input type="text" id="regCargo" required placeholder="Ej: Preceptor 3° Año">
-            </div>
-            <div class="form-group">
-                <label>Curso Asignado:</label>
-                <select id="regCurso">
-                    <option value="1">1° Año</option>
-                    <option value="2">2° Año</option>
-                    <option value="3">3° Año</option>
-                    <option value="4">4° Año</option>
-                    <option value="5">5° Año</option>
-                    <option value="6">6° Año</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Turno Asignado:</label>
-                <select id="regTurno">
-                    <option value="manana">Mañana</option>
-                    <option value="tarde">Tarde</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Cree su Clave Única:</label>
-                <input type="password" id="regCode" required placeholder="Clave para sus accesos">
-            </div>
-            <button type="submit" class="btn btn-success">Registrar Auxiliar</button>
-        </form>
-    </div>
-
-    <!-- PANEL PRINCIPAL DE NOTAS -->
-    <div id="mainPanel" class="main-panel hidden">
-        <div class="top-controls">
-            <div class="filter-group">
-                <label><b>Turno:</b></label>
-                <select id="filterTurno" onchange="renderTabla()">
-                    <option value="manana">Mañana</option>
-                    <option value="tarde">Tarde</option>
-                </select>
-
-                <label><b>Curso:</b></label>
-                <select id="filterCurso" onchange="renderTabla()">
-                    <option value="1">1° Año</option>
-                    <option value="2">2° Año</option>
-                    <option value="3">3° Año</option>
-                    <option value="4">4° Año</option>
-                    <option value="5">5° Año</option>
-                    <option value="6">6° Año</option>
-                </select>
-            </div>
-
-            <div>
-                <button id="btnExport" class="btn btn-success" onclick="descargarExcel()" style="width:auto; margin-right: 10px;">📊 Descargar Planilla (Excel)</button>
-                <button class="btn btn-danger" onclick="logout()">Cerrar Sesión</button>
-            </div>
-        </div>
-
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th rowspan="2">Alumno</th>
-                        <th rowspan="2">Ingreso</th>
-                        <th colspan="3" class="materia-header">Matemática</th>
-                        <th colspan="3" class="materia-header">Lengua</th>
-                        <th colspan="3" class="materia-header">Historia</th>
-                        <th rowspan="2">Materias que Adeuda</th>
-                        <th rowspan="2">Estado / Alerta</th>
-                        <th rowspan="2">Acciones</th>
-                    </tr>
-                    <tr>
-                        <th>1°T</th><th>2°T</th><th>3°T</th>
-                        <th>1°T</th><th>2°T</th><th>3°T</th>
-                        <th>1°T</th><th>2°T</th><th>3°T</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaCuerpo">
-                    <!-- Datos dinámicos -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <script>
-        // BD SIMULADA EN LOCALSTORAGE
-        const MASTER_KEY = "MAESTRO2026";
-        let currentUser = null;
-
-        // Datos iniciales de ejemplo
-        let alumnosBD = JSON.parse(localStorage.getItem('alumnosBD')) || [
-            { id: 1, nombre: "Pérez, Juan", ingreso: 2023, curso: "3", turno: "manana", adeudadas: ["Matemática (1°)", "Lengua (2°)", "Historia (2°)"], notas: { mat: [6,7,5], len: [7,8,8], his: [4,5,6] } },
-            { id: 2, nombre: "Gómez, María", ingreso: 2024, curso: "3", turno: "manana", adeudadas: ["Inglés (1°)"], notas: { mat: [8,9,9], len: [9,9,10], his: [8,8,9] } },
-            { id: 3, nombre: "López, Carlos", ingreso: 2023, curso: "3", turno: "tarde", adeudadas: [], notas: { mat: [7,7,8], len: [6,7,7], his: [7,8,8] } }
-        ];
-
-        let auxiliaresBD = JSON.parse(localStorage.getItem('auxiliaresBD')) || [];
-
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(b => b.classList.remove('active'));
-            if(tab === 'login') {
-                document.querySelectorAll('.auth-tab')[0].classList.add('active');
-                document.getElementById('loginForm').classList.remove('hidden');
-                document.getElementById('registerForm').classList.add('hidden');
-            } else {
-                document.querySelectorAll('.auth-tab')[1].¡Qué bueno que te haya gustado el prototipo inicial! Se entiende a la perfección la evolución que buscas para el sistema.
-
-Para dar ese salto desde una simulación básica a un **sistema funcional real y profesional**, el código ahora incorpora un sistema de inicio de sesión con roles diferenciados (Auxiliares Docentes, Dirección y Secretaría), registro de personal, tablero de carga por curso y materia, y un módulo de exportación de planillas para los directivos.
-
----
-
-### ¿Cómo funciona la arquitectura actualizada?
-
-1. **Pantalla de Acceso y Registro (Login / Registro):**
-   * **Dirección y Secretaría:** Ingresan seleccionando su rol e introduciendo la **Clave Maestra** (por defecto configurada como `DIRECTOR2026` o `SECRETARIA2026`). Tienen acceso de lectura global y botón para **descargar/imprimir planillas completas**.
-   * **Auxiliares Docentes (Preceptores):** Se registran por primera vez con su nombre completo, DNI/Legajo, clave personal y el curso a cargo (ejemplo: *3° Año - Turno Mañana*). Al iniciar sesión, la plataforma identifica su perfil y habilita únicamente los cursos que le corresponden.
-
-2. **Vista de Carga de Valoraciones (Auxiliar Docente):**
-   * Al ingresar, el preceptor selecciona la materia a evaluar.
-   * La tabla muestra en pantalla a todos los alumnos del curso, sus 3 valoraciones trimestrales y la **condición/promedio**.
-   * Muestra una columna dedicada a **Materias Adeudadas**: si el alumno debe materias de años anteriores (ej. *Matemática 1° Año*, *Historia 2° Año*), se listan detalladamente en esa celda.
-   * Si las materias adeudadas son **3 o más**, el casillero se torna en **color rojo de alerta automatizado**.
-
-3. **Descarga y Reportes (Director / Secretario):**
-   * Tienen acceso a la vista consolidada de todos los turnos y cursos, junto con un botón para **exportar o imprimir la planilla oficial**.
-
----
-
-### Código Completo del Nuevo Sistema
-
-Reemplaza todo el contenido de tu archivo **`index.html`** en GitHub por este nuevo código:
-
-```html
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión Académica - Colegio Witralén</title>
+    <title>Sistema de Gestión Académica - La Pampa</title>
     <style>
         :root {
             --primary: #1a365d;
             --secondary: #2b6cb0;
             --accent: #319795;
             --danger: #e53e3e;
-            --danger-bg: #fed7d7;
+            --success: #38a169;
             --warning: #dd6b20;
             --light: #f7fafc;
             --dark: #2d3748;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #edf2f7;
             color: var(--dark);
         }
 
-        /* Nav & Header */
         header {
             background-color: var(--primary);
             color: white;
@@ -418,27 +34,31 @@ Reemplaza todo el contenido de tu archivo **`index.html`** en GitHub por este nu
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+        header h2 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
         .user-badge {
-            background-color: rgba(255,255,255,0.15);
+            background-color: rgba(255,255,255,0.2);
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.9em;
         }
 
         .container {
-            max-width: 1250px;
-            margin: 20px auto;
+            max-width: 1200px;
+            margin: 30px auto;
             padding: 0 15px;
         }
 
-        /* Modal / Formulario Auth */
         .auth-card {
             background: white;
             max-width: 480px;
-            margin: 40px auto;
+            margin: 20px auto;
             padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .auth-tabs {
@@ -449,12 +69,14 @@ Reemplaza todo el contenido de tu archivo **`index.html`** en GitHub por este nu
 
         .auth-tab-btn {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: none;
             background: none;
             font-weight: bold;
             cursor: pointer;
             color: #718096;
+            font-size: 1rem;
+            transition: all 0.2s;
         }
 
         .auth-tab-btn.active {
@@ -479,43 +101,37 @@ Reemplaza todo el contenido de tu archivo **`index.html`** en GitHub por este nu
             border: 1px solid #cbd5e0;
             border-radius: 6px;
             box-sizing: border-box;
+            font-size: 0.95rem;
         }
 
         .btn {
-            padding: 10px 18px;
+            padding: 10px 16px;
             border: none;
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
+            font-size: 0.9rem;
+            display: inline-block;
+            text-align: center;
         }
 
         .btn-primary { background: var(--secondary); color: white; }
         .btn-primary:hover { background: #2c5282; }
-        .btn-success { background: #38a169; color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { background: #2f855a; }
         .btn-danger { background: var(--danger); color: white; }
-        .btn-block { width: 100%; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-sm { padding: 5px 10px; font-size: 0.8em; }
 
-        /* Dashboard */
-        .dashboard-header {
+        .section-box {
             background: white;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: space-between;
-            align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
-        .filters-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        /* Tabla de Calificaciones */
         .table-container {
             background: white;
             border-radius: 8px;
@@ -526,13 +142,13 @@ Reemplaza todo el contenido de tu archivo **`index.html`** en GitHub por este nu
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.95em;
+            font-size: 0.9em;
         }
 
         th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 12px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
         }
 
         th {
@@ -547,281 +163,239 @@ Reemplaza todo el contenido de tu archivo **`index.html`** en GitHub por este nu
             text-align: center;
             border: 1px solid #cbd5e0;
             border-radius: 4px;
-        }
-
-        /* Celda de Adeudadas y Alerta */
-        .cell-adeuda {
-            max-width: 220px;
-            font-size: 0.88em;
-        }
-
-        .badge-adeuda {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            background: #edf2f7;
-            color: #4a5568;
-            margin: 2px;
-            font-weight: 600;
-        }
-
-        .status-danger {
-            background-color: var(--danger-bg) !important;
-            color: #9b2c2c !important;
-            border: 1px solid #feb2b2;
-            font-weight: bold;
-            padding: 6px;
-            border-radius: 6px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
         }
 
         .hidden { display: none !important; }
 
-        @media print {
-            header, .dashboard-header, .btn, .no-print { display: none !important; }
-            body { background: white; }
-            .table-container { box-shadow: none; }
+        .alert-box {
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
         }
+        .alert-success { background: #c6f6d5; color: #22543d; border: 1px solid #9ae6b4; }
+        .alert-danger { background: #fed7d7; color: #742a2a; border: 1px solid #feb2b2; }
     </style>
 </head>
 <body>
 
     <header>
-        <h2>🏫 Gestión Académica - Colegio Witralén</h2>
+        <h2>🏫 Gestión Académica - La Pampa</h2>
         <div id="userInfo" class="user-badge hidden">
             <span id="userName">Usuario</span> (<span id="userRole">Rol</span>)
-            <button class="btn btn-danger" style="padding: 3px 8px; margin-left: 10px;" onclick="cerrarSesion()">Salir</button>
+            <button class="btn btn-danger btn-sm" style="margin-left: 10px;" onclick="cerrarSesion()">Salir</button>
         </div>
     </header>
 
     <div class="container">
 
-        <!-- SECCIÓN DE AUTENTICACIÓN / REGISTRO -->
+        <!-- MÓDULO DE ACCESO / REGISTRO -->
         <div id="authSection" class="auth-card">
+            
+            <div id="msgBox" class="hidden alert-box"></div>
+
             <div class="auth-tabs">
-                <button class="auth-tab-btn active" onclick="switchAuthTab('login')">Iniciar Sesión</button>
-                <button class="auth-tab-btn" onclick="switchAuthTab('register')">Registrar Auxiliar</button>
+                <button type="button" class="auth-tab-btn active" id="tabLoginBtn" onclick="cambiarPestana('login')">Iniciar Sesión</button>
+                <button type="button" class="auth-tab-btn" id="tabRegBtn" onclick="cambiarPestana('register')">Crear Cuenta</button>
             </div>
 
-            <!-- Formulario Login -->
-            <form id="loginForm" onsubmit="handleLogin(event)">
+            <!-- FORMULARIO LOGIN -->
+            <form id="loginForm" onsubmit="ejecutarLogin(event)">
                 <div class="form-group">
-                    <label>Tipo de Usuario / Perfil</label>
-                    <select id="loginRole" class="form-control" onchange="toggleMasterKeyInput()">
-                        <option value="auxiliar">Auxiliar Docente / Preceptor</option>
-                        <option value="directivo">Directivo (Pase Libre)</option>
-                        <option value="secretaria">Secretario/a (Pase Libre)</option>
-                    </select>
-                </div>
-
-                <div class="form-group" id="dniGroup">
                     <label>DNI / Legajo</label>
-                    <input type="text" id="loginDni" class="form-control" placeholder="Ingrese su DNI">
+                    <input type="text" id="loginDni" class="form-control" placeholder="Ingrese su DNI sin puntos" required>
                 </div>
 
                 <div class="form-group">
-                    <label id="passLabel">Contraseña / Código Único</label>
+                    <label>Contraseña</label>
                     <input type="password" id="loginPass" class="form-control" placeholder="••••••••" required>
-                    <small id="passHelp" style="color: #718096; display:none;">Clave Maestra Directivos: <b>DIRECTOR2026</b> | Secretaría: <b>SECRETARIA2026</b></small>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">Ingresar al Sistema</button>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Ingresar al Sistema</button>
+
+                <div style="margin-top: 20px; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+                    <button type="button" class="btn btn-warning btn-sm" style="width:100%;" onclick="reiniciarDatos()">
+                        🔄 Reiniciar memoria (Borrar usuarios anteriores)
+                    </button>
+                </div>
             </form>
 
-            <!-- Formulario Registro Auxiliares -->
-            <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
+            <!-- FORMULARIO REGISTRO -->
+            <form id="registerForm" class="hidden" onsubmit="ejecutarRegistro(event)">
                 <div class="form-group">
-                    <label>Nombre y Apellido</label>
-                    <input type="text" id="regNombre" class="form-control" required placeholder="Ej. Ana García">
+                    <label>Nombre y Apellido Completo</label>
+                    <input type="text" id="regNombre" class="form-control" placeholder="Ej. Juan Pérez" required>
                 </div>
                 <div class="form-group">
-                    <label>Cargo / Función</label>
-                    <input type="text" id="regCargo" class="form-control" value="Auxiliar Docente / Preceptor" readonly>
-                </div>
-                <div class="form-group">
-                    <label>DNI / Legajo</label>
-                    <input type="text" id="regDni" class="form-control" required placeholder="Número de documento">
-                </div>
-                <div class="form-group">
-                    <label>Curso y Turno a Cargo</label>
-                    <select id="regCurso" class="form-control">
-                        <option value="1_M">1° Año - Turno Mañana</option>
-                        <option value="2_M">2° Año - Turno Mañana</option>
-                        <option value="3_M">3° Año - Turno Mañana</option>
-                        <option value="1_T">1° Año - Turno Tarde</option>
-                        <option value="2_T">2° Año - Turno Tarde</option>
-                        <option value="3_T">3° Año - Turno Tarde</option>
+                    <label>Cargo / Rol Institucional</label>
+                    <select id="regRole" class="form-control">
+                        <option value="directivo">Equipo Directivo (Acceso Inmediato)</option>
+                        <option value="secretaria">Secretario/a Académico/a</option>
+                        <option value="auxiliar">Auxiliar Docente / Preceptor</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Crear Código / Clave Personal</label>
-                    <input type="password" id="regPass" class="form-control" required placeholder="Clave personal">
+                    <label>DNI / Legajo</label>
+                    <input type="text" id="regDni" class="form-control" placeholder="Número de DNI sin puntos" required>
                 </div>
-                <button type="submit" class="btn btn-success btn-block">Completar Registro</button>
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="regEmail" class="form-control" placeholder="correo@ejemplo.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Crea tu Contraseña</label>
+                    <input type="password" id="regPass" class="form-control" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-success" style="width:100%;">Registrarme Ahora</button>
             </form>
         </div>
 
-        <!-- DASHBOARD DE GESTIÓN ACADÉMICA -->
+        <!-- PANEL DE CONTROL PRINCIPAL (DASHBOARD) -->
         <div id="dashboardSection" class="hidden">
-            
-            <div class="dashboard-header">
-                <div class="filters-group">
-                    <div>
-                        <label><b>Turno:</b></label>
-                        <select id="filterTurno" class="form-control" onchange="cargarTabla()">
-                            <option value="M">Mañana</option>
-                            <option value="T">Tarde</option>
+            <div class="section-box">
+                <h3 style="margin:0 0 5px 0; color: var(--primary);">Bienvenido/a al Sistema</h3>
+                <p style="margin:0; font-size:0.9em; color:#718096;">Has iniciado sesión correctamente.</p>
+            </div>
+
+            <!-- REGISTRO DE ALUMNOS -->
+            <div class="section-box">
+                <h4 style="margin-top:0; color: var(--primary);">➕ Cargar Alumno</h4>
+                <form onsubmit="agregarAlumno(event)" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+                    <div style="flex:2; min-width: 200px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Nombre y Apellido</label>
+                        <input type="text" id="alumnoNombre" class="form-control" placeholder="Ej: Gómez, Ana" required>
+                    </div>
+                    <div style="flex:1; min-width: 100px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Año Lectivo</label>
+                        <select id="alumnoAno" class="form-control">
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
                         </select>
                     </div>
-                    <div>
-                        <label><b>Curso:</b></label>
-                        <select id="filterCurso" class="form-control" onchange="cargarTabla()">
+                    <div style="flex:1; min-width: 100px;">
+                        <label style="font-size:0.85em; font-weight:bold;">Curso</label>
+                        <select id="alumnoCurso" class="form-control">
                             <option value="1">1° Año</option>
                             <option value="2">2° Año</option>
                             <option value="3">3° Año</option>
-                            <option value="4">4° Año</option>
-                            <option value="5">5° Año</option>
-                            <option value="6">6° Año</option>
                         </select>
                     </div>
                     <div>
-                        <label><b>Materia:</b></label>
-                        <select id="filterMateria" class="form-control" onchange="cargarTabla()">
-                            <option value="Matemática">Matemática</option>
-                            <option value="Lengua">Lengua y Literatura</option>
-                            <option value="Historia">Historia</option>
-                            <option value="Física">Física</option>
-                        </select>
+                        <button type="submit" class="btn btn-success">Guardar Alumno</button>
                     </div>
-                </div>
-
-                <div>
-                    <button id="btnPrint" class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / Descargar Planilla</button>
-                    <button id="btnSave" class="btn btn-success" onclick="guardarNotas()">💾 Guardar Cambios</button>
-                </div>
+                </form>
             </div>
 
-            <!-- Tabla principal -->
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Alumno</th>
-                            <th>Año Ingreso</th>
-                            <th>1° Valoración</th>
-                            <th>2° Valoración</th>
-                            <th>3° Valoración</th>
-                            <th>Condición</th>
-                            <th>Materias Adeudadas (Años Anteriores)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaCuerpo">
-                        <!-- Carga dinámica -->
-                    </tbody>
-                </table>
+            <!-- PLANILLA DE NOTAS -->
+            <div class="section-box">
+                <h4 style="margin-top:0; color: var(--primary);">📋 Planilla de Calificaciones</h4>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Alumno</th>
+                                <th>Matemática</th>
+                                <th>Lengua</th>
+                                <th>Historia</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaAlumnosCuerpo">
+                            <!-- Filas dinámicas -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
     </div>
 
     <script>
-        // BD Local en Memoria (Simulación)
-        let usuariosDB = JSON.parse(localStorage.getItem('usuarios_colegio')) || [];
+        // Variables de estado
         let usuarioActual = null;
+        let baseUsuarios = JSON.parse(localStorage.getItem('sys_usuarios')) || [];
+        let baseAlumnos = JSON.parse(localStorage.getItem('sys_alumnos')) || [];
 
-        // Estudiantes de muestra
-        let alumnosDB = [
-            { id: 101, nombre: "Pérez, Juan Martin", ingreso: 2023, curso: "3", turno: "M", adeudadas: ["Matemática (1°)", "Historia (2°)", "Física (2°)"], notas: { "Matemática": [6, 7, 8] } },
-            { id: 102, nombre: "Gómez, Sofía", ingreso: 2024, curso: "3", turno: "M", adeudadas: ["Lengua (1°)"], notas: { "Matemática": [8, 9, 9] } },
-            { id: 103, nombre: "Rodríguez, Lucas", ingreso: 2023, curso: "3", turno: "M", adeudadas: ["Matemática (1°)", "Inglés (1°)", "Química (2°)", "Historia (1°)"], notas: { "Matemática": [4, 5, 4] } },
-            { id: 104, nombre: "Fernández, Clara", ingreso: 2025, curso: "2", turno: "T", adeudadas: [], notas: { "Lengua": [9, 8, 10] } }
-        ];
+        // Función para cambiar pestañas de Login / Registro
+        function cambiarPestana(pestana) {
+            ocultarMensaje();
+            const formLogin = document.getElementById('loginForm');
+            const formReg = document.getElementById('registerForm');
+            const btnLogin = document.getElementById('tabLoginBtn');
+            const btnReg = document.getElementById('tabRegBtn');
 
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.remove('active'));
-            if(tab === 'login') {
-                document.querySelectorAll('.auth-tab-btn')[0].classList.add('active');
-                document.getElementById('loginForm').classList.remove('hidden');
-                document.getElementById('registerForm').classList.add('hidden');
+            if (pestana === 'login') {
+                formLogin.classList.remove('hidden');
+                formReg.classList.add('hidden');
+                btnLogin.classList.add('active');
+                btnReg.classList.remove('active');
             } else {
-                document.querySelectorAll('.auth-tab-btn')[1].classList.add('active');
-                document.getElementById('loginForm').classList.add('hidden');
-                document.getElementById('registerForm').classList.remove('hidden');
+                formLogin.classList.add('hidden');
+                formReg.classList.remove('hidden');
+                btnLogin.classList.remove('active');
+                btnReg.classList.add('active');
             }
         }
 
-        function toggleMasterKeyInput() {
-            const role = document.getElementById('loginRole').value;
-            const dniGroup = document.getElementById('dniGroup');
-            const passHelp = document.getElementById('passHelp');
+        // Registrar nuevo usuario
+        function ejecutarRegistro(event) {
+            event.preventDefault();
+            
+            const dni = document.getElementById('regDni').value.trim();
+            const nombre = document.getElementById('regNombre').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const pass = document.getElementById('regPass').value;
+            const role = document.getElementById('regRole').value;
 
-            if(role === 'directivo' || role === 'secretaria') {
-                dniGroup.style.display = 'none';
-                passHelp.style.display = 'block';
-            } else {
-                dniGroup.style.display = 'block';
-                passHelp.style.display = 'none';
-            }
-        }
-
-        function handleRegister(e) {
-            e.preventDefault();
-            const nuevoUser = {
-                nombre: document.getElementById('regNombre').value,
-                cargo: document.getElementById('regCargo').value,
-                dni: document.getElementById('regDni').value,
-                curso: document.getElementById('regCurso').value,
-                pass: document.getElementById('regPass').value,
-                role: 'auxiliar'
-            };
-
-            usuariosDB.push(nuevoUser);
-            localStorage.setItem('usuarios_colegio', JSON.stringify(usuariosDB));
-            alert('¡Registro exitoso! Ya puede iniciar sesión con sus datos.');
-            switchAuthTab('login');
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const role = document.getElementById('loginRole').value;
-            const pass = document.getElementById('loginPass').value;
-
-            if(role === 'directivo' && pass === 'DIRECTOR2026') {
-                usuarioActual = { nombre: "Equipo Directivo", role: "Directivo (Pase Libre)" };
-            } else if(role === 'secretaria' && pass === 'SECRETARIA2026') {
-                usuarioActual = { nombre: "Secretaría Académica", role: "Secretario/a (Pase Libre)" };
-            } else if(role === 'auxiliar') {
-                const dni = document.getElementById('loginDni').value;
-                const user = usuariosDB.find(u => u.dni === dni && u.pass === pass);
-                if(user) {
-                    usuarioActual = user;
-                } else {
-                    alert('DNI o Clave de Auxiliar incorrecta. Si es su primera vez, regístrese.');
-                    return;
-                }
-            } else {
-                alert('Clave invalida.');
+            // Verificar si el DNI ya está guardado
+            const existe = baseUsuarios.some(u => u.dni === dni);
+            if (existe) {
+                mostrarMensaje('El DNI ingresado ya está registrado. Usa la pestaña Iniciar Sesión o haz clic en "Reiniciar memoria".', 'danger');
                 return;
             }
 
-            iniciarSesionDashboard();
+            const nuevoUsuario = { dni, nombre, email, pass, role };
+            baseUsuarios.push(nuevoUsuario);
+            localStorage.setItem('sys_usuarios', JSON.stringify(baseUsuarios));
+
+            mostrarMensaje('¡Cuenta creada con éxito! Ahora puedes iniciar sesión con tu DNI y contraseña.', 'success');
+            
+            // Limpiar campos y pasar a login
+            document.getElementById('registerForm').reset();
+            cambiarPestana('login');
+            document.getElementById('loginDni').value = dni;
         }
 
-        function iniciarSesionDashboard() {
+        // Iniciar sesión
+        function ejecutarLogin(event) {
+            event.preventDefault();
+
+            const dni = document.getElementById('loginDni').value.trim();
+            const pass = document.getElementById('loginPass').value;
+
+            const encontrado = baseUsuarios.find(u => u.dni === dni && u.pass === pass);
+
+            if (!encontrado) {
+                mostrarMensaje('DNI o contraseña incorrectos. Verifica tus datos o crea una cuenta nueva.', 'danger');
+                return;
+            }
+
+            usuarioActual = encontrado;
+            abrirDashboard();
+        }
+
+        // Mostrar u ocultar paneles
+        function abrirDashboard() {
             document.getElementById('authSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.remove('hidden');
             document.getElementById('userInfo').classList.remove('hidden');
-            
+
             document.getElementById('userName').innerText = usuarioActual.nombre;
-            document.getElementById('userRole').innerText = usuarioActual.role || usuarioActual.cargo;
+            document.getElementById('userRole').innerText = usuarioActual.role.toUpperCase();
 
-            // Si es auxiliar, bloquear/limitar controles al curso asignado
-            if(usuarioActual.role === 'auxiliar' || usuarioActual.cargo) {
-                const [curso, turno] = usuarioActual.curso.split('_');
-                document.getElementById('filterCurso').value = curso;
-                document.getElementById('filterTurno').value = turno;
-            }
-
-            cargarTabla();
+            renderizarTabla();
         }
 
         function cerrarSesion() {
@@ -829,63 +403,74 @@ Reemplaza todo el contenido de tu archivo **`index.html`** en GitHub por este nu
             document.getElementById('authSection').classList.remove('hidden');
             document.getElementById('dashboardSection').classList.add('hidden');
             document.getElementById('userInfo').classList.add('hidden');
+            ocultarMensaje();
         }
 
-        function cargarTabla() {
-            const turno = document.getElementById('filterTurno').value;
-            const curso = document.getElementById('filterCurso').value;
-            const materia = document.getElementById('filterMateria').value;
+        // Cargar alumnos y notas
+        function agregarAlumno(e) {
+            e.preventDefault();
+            const nuevo = {
+                id: Date.now(),
+                nombre: document.getElementById('alumnoNombre').value.trim(),
+                ano: document.getElementById('alumnoAno').value,
+                curso: document.getElementById('alumnoCurso').value,
+                notas: {}
+            };
 
-            const esDirectivo = !usuarioActual.role || usuarioActual.role.includes('Pase Libre');
-            const tbody = document.getElementById('tablaCuerpo');
+            baseAlumnos.push(nuevo);
+            localStorage.setItem('sys_alumnos', JSON.stringify(baseAlumnos));
+            document.getElementById('alumnoNombre').value = '';
+            renderizarTabla();
+        }
+
+        function renderizarTabla() {
+            const tbody = document.getElementById('tablaAlumnosCuerpo');
             tbody.innerHTML = '';
 
-            const filtrados = alumnosDB.filter(a => a.turno === turno && a.curso === curso);
-
-            if(filtrados.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No hay alumnos registrados en ${curso}° Año - Turno ${turno === 'M' ? 'Mañana' : 'Tarde'}.</td></tr>`;
+            if (baseAlumnos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="color:#a0aec0;">No hay alumnos registrados aún.</td></tr>';
                 return;
             }
 
-            filtrados.forEach(a => {
-                const notasMateria = (a.notas && a.notas[materia]) ? a.notas[materia] : ['-', '-', '-'];
-                const adeudadasCount = a.adeudadas.length;
-                
-                // Semáforo: 3 o más adeudadas = Alerta Roja
-                const esRiesgoRojo = adeudadasCount >= 3;
-                const claseAdeudada = esRiesgoRojo ? 'status-danger' : '';
-
-                const listaAdeudadasHTML = adeudadasCount > 0 
-                    ? a.adeudadas.map(m => `<span class="badge-adeuda">${m}</span>`).join(' ') 
-                    : '<small style="color:#38a169;">Sin adeudadas</small>';
-
-                const tr = document.createElement('tr');
+            baseAlumnos.forEach(al => {
+                let tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><b>${a.nombre}</b></td>
-                    <td>${a.ingreso}</td>
-                    <td><input type="text" class="input-nota" value="${notasMateria[0]}" ${!esDirectivo ? '' : 'disabled'}></td>
-                    <td><input type="text" class="input-nota" value="${notasMateria[1]}" ${!esDirectivo ? '' : 'disabled'}></td>
-                    <td><input type="text" class="input-nota" value="${notasMateria[2]}" ${!esDirectivo ? '' : 'disabled'}></td>
-                    <td><b>${calcularPromedio(notasMateria)}</b></td>
-                    <td class="cell-adeuda ${claseAdeudada}">
-                        <b>${adeudadasCount} materia(s)</b><br>
-                        ${listaAdeudadasHTML}
-                        ${esRiesgoRojo ? '<br>⚠️ <b>ALERTA DE RIESGO</b>' : ''}
-                    </td>
+                    <td><b>${al.nombre}</b> <br><small style="color:#718096;">${al.curso}° Año (${al.ano})</small></td>
+                    <td><input type="text" class="input-nota" value="${al.notas['mat'] || ''}" onchange="guardarNota(${al.id}, 'mat', this.value)"></td>
+                    <td><input type="text" class="input-nota" value="${al.notas['len'] || ''}" onchange="guardarNota(${al.id}, 'len', this.value)"></td>
+                    <td><input type="text" class="input-nota" value="${al.notas['his'] || ''}" onchange="guardarNota(${al.id}, 'his', this.value)"></td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        function calcularPromedio(notas) {
-            const num = notas.map(n => parseFloat(n)).filter(n => !isNaN(n));
-            if(num.length === 0) return '-';
-            const sum = num.reduce((a, b) => a + b, 0);
-            return (sum / num.length).toFixed(1);
+        function guardarNota(alumnoId, materia, valor) {
+            const al = baseAlumnos.find(a => a.id === alumnoId);
+            if (al) {
+                if (!al.notas) al.notas = {};
+                al.notas[materia] = valor.toUpperCase();
+                localStorage.setItem('sys_alumnos', JSON.stringify(baseAlumnos));
+            }
         }
 
-        function guardarNotas() {
-            alert('✅ Las valoraciones y cambios han sido guardados correctamente.');
+        // Utilidades de mensajes y reinicio
+        function mostrarMensaje(texto, tipo) {
+            const box = document.getElementById('msgBox');
+            box.className = `alert-box alert-${tipo}`;
+            box.innerText = texto;
+            box.classList.remove('hidden');
+        }
+
+        function ocultarMensaje() {
+            document.getElementById('msgBox').classList.add('hidden');
+        }
+
+        function reiniciarDatos() {
+            if (confirm('¿Deseas borrar las cuentas guardadas para crear una nueva de cero?')) {
+                localStorage.removeItem('sys_usuarios');
+                baseUsuarios = [];
+                mostrarMensaje('Memoria reiniciada. Ya puedes crear tu cuenta.', 'success');
+            }
         }
     </script>
 </body>
