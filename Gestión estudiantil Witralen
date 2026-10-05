@@ -3,475 +3,544 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión Académica - La Pampa</title>
+    <title>Gestión Estudiantil Witralén</title>
     <style>
         :root {
-            --primary: #1a365d;
-            --secondary: #2b6cb0;
-            --accent: #319795;
-            --danger: #e53e3e;
-            --success: #38a169;
-            --warning: #dd6b20;
-            --light: #f7fafc;
-            --dark: #2d3748;
+            --primary-dark: #0f172a;
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --accent: #0d9488;
+            --bg-main: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #edf2f7;
-            color: var(--dark);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
+        /* HEADER INSTITUCIONAL */
         header {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
             color: white;
-            padding: 1rem 2rem;
+            padding: 1.25rem 2rem;
+            box-shadow: var(--shadow-md);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        header h2 {
-            font-size: 1.2rem;
-            margin: 0;
-        }
-
-        .user-badge {
-            background-color: rgba(255,255,255,0.2);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.9em;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 15px;
-        }
-
-        .auth-card {
-            background: white;
-            max-width: 480px;
-            margin: 20px auto;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .auth-tabs {
+        .header-title {
             display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e2e8f0;
+            align-items: center;
+            gap: 12px;
         }
 
-        .auth-tab-btn {
+        .header-title h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .header-badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(4px);
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 0.9rem;
+        }
+
+        /* LAYOUT PRINCIPAL */
+        .main-container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
             flex: 1;
-            padding: 12px;
+        }
+
+        /* SECCIÓN LOGIN / REGISTRO */
+        .auth-wrapper {
+            max-width: 440px;
+            margin: 3rem auto;
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .auth-header {
+            padding: 2rem 2rem 1rem 2rem;
+            text-align: center;
+        }
+
+        .auth-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .auth-nav {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: #f8fafc;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 1rem;
             border: none;
             background: none;
-            font-weight: bold;
+            font-weight: 600;
+            color: var(--text-muted);
             cursor: pointer;
-            color: #718096;
-            font-size: 1rem;
             transition: all 0.2s;
+            font-size: 0.95rem;
         }
 
-        .auth-tab-btn.active {
-            color: var(--secondary);
-            border-bottom: 3px solid var(--secondary);
+        .auth-tab.active {
+            color: var(--primary-light);
+            background: var(--surface);
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .auth-body {
+            padding: 2rem;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 1.25rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            font-size: 0.85rem;
             font-weight: 600;
-            font-size: 0.9em;
+            color: var(--text-main);
+            margin-bottom: 0.4rem;
         }
 
         .form-control {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
-            box-sizing: border-box;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background-color: var(--surface);
         }
 
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        /* BOTONES */
         .btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.9rem;
-            display: inline-block;
-            text-align: center;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
         }
 
-        .btn-primary { background: var(--secondary); color: white; }
-        .btn-primary:hover { background: #2c5282; }
+        .btn-block { width: 100%; }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+
         .btn-success { background: var(--success); color: white; }
-        .btn-success:hover { background: #2f855a; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-warning { background: var(--warning); color: white; }
-        .btn-sm { padding: 5px 10px; font-size: 0.8em; }
+        .btn-success:hover { background: #059669; }
 
-        .section-box {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        .btn-secondary { background: #e2e8f0; color: var(--text-main); }
+        .btn-secondary:hover { background: #cbd5e1; }
+
+        .btn-danger-outline { background: transparent; border: 1px solid #fca5a5; color: var(--danger); }
+        .btn-danger-outline:hover { background: #fef2f2; }
+
+        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+
+        /* DASHBOARD PRINCIPAL */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
         }
 
-        .table-container {
-            background: white;
-            border-radius: 8px;
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* GRID FILTROS */
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        /* TABLA DE CALIFICACIONES */
+        .table-responsive {
             overflow-x: auto;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            border: 1px solid var(--border);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.9em;
-        }
-
-        th, td {
-            padding: 10px 12px;
-            text-align: center;
-            border: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+            background: var(--surface);
         }
 
         th {
-            background-color: #f7fafc;
-            color: var(--primary);
+            background: #f1f5f9;
+            color: var(--primary-dark);
             font-weight: 700;
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
         }
 
-        .input-nota {
-            width: 55px;
-            padding: 6px;
+        td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
             text-align: center;
-            border: 1px solid #cbd5e0;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
+            vertical-align: middle;
         }
+
+        tr:hover { background-color: #f8fafc; }
+
+        .student-cell {
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .student-dni {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        .grade-input {
+            width: 52px;
+            height: 36px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background-color: var(--surface);
+            transition: all 0.2s;
+        }
+
+        .grade-input:focus {
+            border-color: var(--primary-light);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .obs-textarea {
+            width: 100%;
+            min-width: 180px;
+            height: 38px;
+            padding: 6px 10px;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            resize: vertical;
+        }
+
+        /* BADGES */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
 
         .hidden { display: none !important; }
 
-        .alert-box {
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 0.9em;
+        /* IMPRESIÓN */
+        @media print {
+            header, .no-print, .btn { display: none !important; }
+            body { background: white; }
+            .main-container { max-width: 100%; margin: 0; padding: 0; }
+            .card { border: none; box-shadow: none; padding: 0; margin: 0; }
+            .boletin-item { page-break-after: always; padding: 2rem; border: 1px solid #000; margin-bottom: 2rem; }
         }
-        .alert-success { background: #c6f6d5; color: #22543d; border: 1px solid #9ae6b4; }
-        .alert-danger { background: #fed7d7; color: #742a2a; border: 1px solid #feb2b2; }
     </style>
 </head>
 <body>
 
+    <!-- CABECERA -->
     <header>
-        <h2>🏫 Gestión Académica - La Pampa</h2>
-        <div id="userInfo" class="user-badge hidden">
-            <span id="userName">Usuario</span> (<span id="userRole">Rol</span>)
-            <button class="btn btn-danger btn-sm" style="margin-left: 10px;" onclick="cerrarSesion()">Salir</button>
+        <div class="header-title">
+            <h1>🏫 Gestión Estudiantil Witralén</h1>
+            <span class="header-badge">La Pampa</span>
+        </div>
+        <div id="userPill" class="user-pill hidden">
+            <span id="displayUserName">Docente</span>
+            <button class="btn btn-danger-outline btn-sm" onclick="cerrarSesion()">Cerrar Sesión</button>
         </div>
     </header>
 
-    <div class="container">
+    <div class="main-container">
 
-        <!-- MÓDULO DE ACCESO / REGISTRO -->
-        <div id="authSection" class="auth-card">
-            
-            <div id="msgBox" class="hidden alert-box"></div>
-
-            <div class="auth-tabs">
-                <button type="button" class="auth-tab-btn active" id="tabLoginBtn" onclick="cambiarPestana('login')">Iniciar Sesión</button>
-                <button type="button" class="auth-tab-btn" id="tabRegBtn" onclick="cambiarPestana('register')">Crear Cuenta</button>
+        <!-- MÓDULO DE INGRESO / REGISTRO -->
+        <div id="authBlock" class="auth-wrapper">
+            <div class="auth-header">
+                <h2>Bienvenido/a</h2>
+                <p>Gestión Estudiantil Witralén</p>
             </div>
 
-            <!-- FORMULARIO LOGIN -->
-            <form id="loginForm" onsubmit="ejecutarLogin(event)">
-                <div class="form-group">
-                    <label>DNI / Legajo</label>
-                    <input type="text" id="loginDni" class="form-control" placeholder="Ingrese su DNI sin puntos" required>
-                </div>
+            <div class="auth-nav">
+                <button type="button" class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Ingresar</button>
+                <button type="button" class="auth-tab" id="tabRegister" onclick="switchTab('register')">Crear Cuenta</button>
+            </div>
 
-                <div class="form-group">
-                    <label>Contraseña</label>
-                    <input type="password" id="loginPass" class="form-control" placeholder="••••••••" required>
-                </div>
+            <div class="auth-body">
+                <!-- FORMULARIO LOGIN -->
+                <form id="formLogin" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>DNI / Usuario</label>
+                        <input type="text" id="loginDni" class="form-control" placeholder="Ingrese su número de DNI" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="loginPass" class="form-control" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Ingresar al Sistema</button>
+                </form>
 
-                <button type="submit" class="btn btn-primary" style="width:100%;">Ingresar al Sistema</button>
-
-                <div style="margin-top: 20px; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 15px;">
-                    <button type="button" class="btn btn-warning btn-sm" style="width:100%;" onclick="reiniciarDatos()">
-                        🔄 Reiniciar memoria (Borrar usuarios anteriores)
-                    </button>
-                </div>
-            </form>
-
-            <!-- FORMULARIO REGISTRO -->
-            <form id="registerForm" class="hidden" onsubmit="ejecutarRegistro(event)">
-                <div class="form-group">
-                    <label>Nombre y Apellido Completo</label>
-                    <input type="text" id="regNombre" class="form-control" placeholder="Ej. Juan Pérez" required>
-                </div>
-                <div class="form-group">
-                    <label>Cargo / Rol Institucional</label>
-                    <select id="regRole" class="form-control">
-                        <option value="directivo">Equipo Directivo (Acceso Inmediato)</option>
-                        <option value="secretaria">Secretario/a Académico/a</option>
-                        <option value="auxiliar">Auxiliar Docente / Preceptor</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>DNI / Legajo</label>
-                    <input type="text" id="regDni" class="form-control" placeholder="Número de DNI sin puntos" required>
-                </div>
-                <div class="form-group">
-                    <label>Correo Electrónico</label>
-                    <input type="email" id="regEmail" class="form-control" placeholder="correo@ejemplo.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Crea tu Contraseña</label>
-                    <input type="password" id="regPass" class="form-control" placeholder="••••••••" required>
-                </div>
-
-                <button type="submit" class="btn btn-success" style="width:100%;">Registrarme Ahora</button>
-            </form>
+                <!-- FORMULARIO REGISTRO -->
+                <form id="formRegister" class="hidden" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Nombre y Apellido</label>
+                        <input type="text" id="regName" class="form-control" placeholder="Ej: Prof. Laura Giménez" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Rol Institucional</label>
+                        <select id="regRole" class="form-control">
+                            <option value="Equipo Directivo">Equipo Directivo</option>
+                            <option value="Docente">Docente / Profesor/a</option>
+                            <option value="Preceptor/a">Preceptor/a</option>
+                            <option value="Secretaría">Secretaría</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>DNI</label>
+                        <input type="text" id="regDni" class="form-control" placeholder="Ingrese su DNI" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="regPass" class="form-control" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Registrarse y Entrar</button>
+                </form>
+            </div>
         </div>
 
-        <!-- PANEL DE CONTROL PRINCIPAL (DASHBOARD) -->
-        <div id="dashboardSection" class="hidden">
-            <div class="section-box">
-                <h3 style="margin:0 0 5px 0; color: var(--primary);">Bienvenido/a al Sistema</h3>
-                <p style="margin:0; font-size:0.9em; color:#718096;">Has iniciado sesión correctamente.</p>
-            </div>
+        <!-- PANEL DE TRABAJO Y PLANILLA -->
+        <div id="dashboardBlock" class="hidden">
 
-            <!-- REGISTRO DE ALUMNOS -->
-            <div class="section-box">
-                <h4 style="margin-top:0; color: var(--primary);">➕ Cargar Alumno</h4>
-                <form onsubmit="agregarAlumno(event)" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
-                    <div style="flex:2; min-width: 200px;">
-                        <label style="font-size:0.85em; font-weight:bold;">Nombre y Apellido</label>
-                        <input type="text" id="alumnoNombre" class="form-control" placeholder="Ej: Gómez, Ana" required>
+            <!-- BARRA SUPERIOR DE ACCIONES Y FILTROS -->
+            <div class="card no-print">
+                <div class="card-header">
+                    <div class="card-title">🔍 Selección de Curso y Ciclo</div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary btn-sm" onclick="exportarCSV()">📥 Exportar Planilla</button>
+                        <button class="btn btn-primary btn-sm" onclick="imprimirPantalla()">🖨️ Imprimir</button>
+                        <button class="btn btn-success btn-sm" onclick="generarBoletines()">📄 Generar Boletines</button>
                     </div>
-                    <div style="flex:1; min-width: 100px;">
-                        <label style="font-size:0.85em; font-weight:bold;">Año Lectivo</label>
-                        <select id="alumnoAno" class="form-control">
+                </div>
+
+                <div class="filter-grid">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Ciclo Lectivo</label>
+                        <select id="fAno" class="form-control" onchange="renderTable()">
                             <option value="2026">2026</option>
                             <option value="2025">2025</option>
                         </select>
                     </div>
-                    <div style="flex:1; min-width: 100px;">
-                        <label style="font-size:0.85em; font-weight:bold;">Curso</label>
-                        <select id="alumnoCurso" class="form-control">
-                            <option value="1">1° Año</option>
-                            <option value="2">2° Año</option>
-                            <option value="3">3° Año</option>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Curso / Año</label>
+                        <select id="fCurso" class="form-control" onchange="renderTable()">
+                            <option value="Todos">Todos los Cursos</option>
+                            <option value="1° Año">1° Año</option>
+                            <option value="2° Año">2° Año</option>
+                            <option value="3° Año">3° Año</option>
+                            <option value="4° Año">4° Año</option>
+                            <option value="5° Año">5° Año</option>
+                            <option value="6° Año">6° Año</option>
                         </select>
                     </div>
-                    <div>
-                        <button type="submit" class="btn btn-success">Guardar Alumno</button>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>División</label>
+                        <select id="fDiv" class="form-control" onchange="renderTable()">
+                            <option value="1°">1° Division</option>
+                            <option value="2°">2° Division</option>
+                        </select>
                     </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Turno</label>
+                        <select id="fTurno" class="form-control" onchange="renderTable()">
+                            <option value="Mañana">Mañana</option>
+                            <option value="Tarde">Tarde</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REGISTRO DE ALUMNOS -->
+            <div class="card no-print">
+                <div class="card-header">
+                    <div class="card-title">➕ Inscribir Nuevo Estudiante</div>
+                </div>
+                <form onsubmit="addStudent(event)" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+                    <div style="flex: 2; min-width: 220px;">
+                        <label class="form-group" style="margin:0;">
+                            <span style="font-size:0.85rem; font-weight:600;">Apellido y Nombre</span>
+                            <input type="text" id="newStudentName" class="form-control" placeholder="Ej: Alvarez, Sofía" required>
+                        </label>
+                    </div>
+                    <div style="flex: 1; min-width: 140px;">
+                        <label class="form-group" style="margin:0;">
+                            <span style="font-size:0.85rem; font-weight:600;">DNI Estudiante</span>
+                            <input type="text" id="newStudentDni" class="form-control" placeholder="Número de DNI">
+                        </label>
+                    </div>
+                    <div style="flex: 1; min-width: 120px;">
+                        <label class="form-group" style="margin:0;">
+                            <span style="font-size:0.85rem; font-weight:600;">Curso</span>
+                            <select id="newStudentCurso" class="form-control">
+                                <option value="1° Año">1° Año</option>
+                                <option value="2° Año">2° Año</option>
+                                <option value="3° Año">3° Año</option>
+                                <option value="4° Año">4° Año</option>
+                                <option value="5° Año">5° Año</option>
+                                <option value="6° Año">6° Año</option>
+                            </select>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-success">Guardar Estudiante</button>
                 </form>
             </div>
 
-            <!-- PLANILLA DE NOTAS -->
-            <div class="section-box">
-                <h4 style="margin-top:0; color: var(--primary);">📋 Planilla de Calificaciones</h4>
-                <div class="table-container">
+            <!-- TABLA PRINCIPAL DE NOTAS -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📋 Planilla de Valoraciones Curregulares</div>
+                    <span id="studentCount" style="font-size: 0.85rem; color: var(--text-muted);">Cargados: 0</span>
+                </div>
+
+                <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
-                                <th>Alumno</th>
+                                <th>Estudiante</th>
+                                <th>Curso</th>
+                                <th>Faltas</th>
                                 <th>Matemática</th>
                                 <th>Lengua</th>
                                 <th>Historia</th>
+                                <th>Biología</th>
+                                <th>Inglés</th>
+                                <th>Geografía</th>
+                                <th>Promedio</th>
+                                <th>Estado</th>
+                                <th>Saberes Integrados / Observaciones</th>
+                                <th class="no-print">Acción</th>
                             </tr>
                         </thead>
-                        <tbody id="tablaAlumnosCuerpo">
-                            <!-- Filas dinámicas -->
+                        <tbody id="tableBody">
+                            <!-- Se completa dinámicamente con JS -->
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <!-- CONTENEDOR DE BOLETINES PARA IMPRESIÓN -->
+            <div id="boletinesArea"></div>
+
         </div>
 
     </div>
 
     <script>
-        // Variables de estado
-        let usuarioActual = null;
-        let baseUsuarios = JSON.parse(localStorage.getItem('sys_usuarios')) || [];
-        let baseAlumnos = JSON.parse(localStorage.getItem('sys_alumnos')) || [];
+        // DATOS EN MEMORIA LOCAL
+        let studentsList = JSON.parse(localStorage.getItem('witralen_students')) || [];
 
-        // Función para cambiar pestañas de Login / Registro
-        function cambiarPestana(pestana) {
-            ocultarMensaje();
-            const formLogin = document.getElementById('loginForm');
-            const formReg = document.getElementById('registerForm');
-            const btnLogin = document.getElementById('tabLoginBtn');
-            const btnReg = document.getElementById('tabRegBtn');
-
-            if (pestana === 'login') {
-                formLogin.classList.remove('hidden');
-                formReg.classList.add('hidden');
-                btnLogin.classList.add('active');
-                btnReg.classList.remove('active');
-            } else {
-                formLogin.classList.add('hidden');
-                formReg.classList.remove('hidden');
-                btnLogin.classList.remove('active');
-                btnReg.classList.add('active');
-            }
-        }
-
-        // Registrar nuevo usuario
-        function ejecutarRegistro(event) {
-            event.preventDefault();
-            
-            const dni = document.getElementById('regDni').value.trim();
-            const nombre = document.getElementById('regNombre').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const pass = document.getElementById('regPass').value;
-            const role = document.getElementById('regRole').value;
-
-            // Verificar si el DNI ya está guardado
-            const existe = baseUsuarios.some(u => u.dni === dni);
-            if (existe) {
-                mostrarMensaje('El DNI ingresado ya está registrado. Usa la pestaña Iniciar Sesión o haz clic en "Reiniciar memoria".', 'danger');
-                return;
-            }
-
-            const nuevoUsuario = { dni, nombre, email, pass, role };
-            baseUsuarios.push(nuevoUsuario);
-            localStorage.setItem('sys_usuarios', JSON.stringify(baseUsuarios));
-
-            mostrarMensaje('¡Cuenta creada con éxito! Ahora puedes iniciar sesión con tu DNI y contraseña.', 'success');
-            
-            // Limpiar campos y pasar a login
-            document.getElementById('registerForm').reset();
-            cambiarPestana('login');
-            document.getElementById('loginDni').value = dni;
-        }
-
-        // Iniciar sesión
-        function ejecutarLogin(event) {
-            event.preventDefault();
-
-            const dni = document.getElementById('loginDni').value.trim();
-            const pass = document.getElementById('loginPass').value;
-
-            const encontrado = baseUsuarios.find(u => u.dni === dni && u.pass === pass);
-
-            if (!encontrado) {
-                mostrarMensaje('DNI o contraseña incorrectos. Verifica tus datos o crea una cuenta nueva.', 'danger');
-                return;
-            }
-
-            usuarioActual = encontrado;
-            abrirDashboard();
-        }
-
-        // Mostrar u ocultar paneles
-        function abrirDashboard() {
-            document.getElementById('authSection').classList.add('hidden');
-            document.getElementById('dashboardSection').classList.remove('hidden');
-            document.getElementById('userInfo').classList.remove('hidden');
-
-            document.getElementById('userName').innerText = usuarioActual.nombre;
-            document.getElementById('userRole').innerText = usuarioActual.role.toUpperCase();
-
-            renderizarTabla();
-        }
-
-        function cerrarSesion() {
-            usuarioActual = null;
-            document.getElementById('authSection').classList.remove('hidden');
-            document.getElementById('dashboardSection').classList.add('hidden');
-            document.getElementById('userInfo').classList.add('hidden');
-            ocultarMensaje();
-        }
-
-        // Cargar alumnos y notas
-        function agregarAlumno(e) {
-            e.preventDefault();
-            const nuevo = {
-                id: Date.now(),
-                nombre: document.getElementById('alumnoNombre').value.trim(),
-                ano: document.getElementById('alumnoAno').value,
-                curso: document.getElementById('alumnoCurso').value,
-                notas: {}
-            };
-
-            baseAlumnos.push(nuevo);
-            localStorage.setItem('sys_alumnos', JSON.stringify(baseAlumnos));
-            document.getElementById('alumnoNombre').value = '';
-            renderizarTabla();
-        }
-
-        function renderizarTabla() {
-            const tbody = document.getElementById('tablaAlumnosCuerpo');
-            tbody.innerHTML = '';
-
-            if (baseAlumnos.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="color:#a0aec0;">No hay alumnos registrados aún.</td></tr>';
-                return;
-            }
-
-            baseAlumnos.forEach(al => {
-                let tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><b>${al.nombre}</b> <br><small style="color:#718096;">${al.curso}° Año (${al.ano})</small></td>
-                    <td><input type="text" class="input-nota" value="${al.notas['mat'] || ''}" onchange="guardarNota(${al.id}, 'mat', this.value)"></td>
-                    <td><input type="text" class="input-nota" value="${al.notas['len'] || ''}" onchange="guardarNota(${al.id}, 'len', this.value)"></td>
-                    <td><input type="text" class="input-nota" value="${al.notas['his'] || ''}" onchange="guardarNota(${al.id}, 'his', this.value)"></td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function guardarNota(alumnoId, materia, valor) {
-            const al = baseAlumnos.find(a => a.id === alumnoId);
-            if (al) {
-                if (!al.notas) al.notas = {};
-                al.notas[materia] = valor.toUpperCase();
-                localStorage.setItem('sys_alumnos', JSON.stringify(baseAlumnos));
-            }
-        }
-
-        // Utilidades de mensajes y reinicio
-        function mostrarMensaje(texto, tipo) {
-            const box = document.getElementById('msgBox');
-            box.className = `alert-box alert-${tipo}`;
-            box.innerText = texto;
-            box.classList.remove('hidden');
-        }
-
-        function ocultarMensaje() {
-            document.getElementById('msgBox').classList.add('hidden');
-        }
-
-        function reiniciarDatos() {
-            if (confirm('¿Deseas borrar las cuentas guardadas para crear una nueva de cero?')) {
-                localStorage.removeItem('sys_usuarios');
-                baseUsuarios = [];
-                mostrarMensaje('Memoria reiniciada. Ya puedes crear tu cuenta.', 'success');
-            }
-        }
-    </script>
-</body>
-</html>
+        function switchTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('formLogin').classList.remove('hidden');
+                document.getElementById('formRegister').classList.add('hidden');
+                document.getEle
