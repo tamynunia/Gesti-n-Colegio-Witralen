@@ -50,7 +50,7 @@
 
         .auth-card {
             background: white;
-            max-width: 480px;
+            max-width: 500px;
             margin: 40px auto;
             padding: 25px;
             border-radius: 10px;
@@ -188,7 +188,6 @@
             border-color: #e2e8f0;
         }
 
-        /* Marcado visual de error reportado por preceptor */
         .nota-con-error {
             background-color: #fff5f5 !important;
             border: 2px solid var(--danger) !important;
@@ -226,6 +225,24 @@
             font-weight: bold;
         }
 
+        .badge-estado-pendiente {
+            background: #feebc8;
+            color: #7b341e;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .badge-estado-activo {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
         .nota-observacion {
             font-size: 0.78em;
             color: #c53030;
@@ -250,10 +267,7 @@
             gap: 10px;
         }
 
-        .status-danger {
-            background-color: var(--danger-bg) !important;
-        }
-
+        .status-danger { background-color: var(--danger-bg) !important; }
         .hidden { display: none !important; }
 
         @media print {
@@ -294,14 +308,14 @@
                     <input type="password" id="loginPass" class="form-control" placeholder="••••••••" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary style="width:100%;">Ingresar al Sistema</button>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Ingresar al Sistema</button>
 
                 <div style="text-align: center; margin-top: 15px;">
                     <a href="#" onclick="recuperarClave()" style="font-size: 0.85em; color: var(--secondary); text-decoration: none;">¿Olvidaste tu contraseña?</a>
                 </div>
             </form>
 
-            <!-- REGISTRO GENERAL -->
+            <!-- REGISTRO GENERAL CON CÓDIGO DE INVITACIÓN OPCIONAL -->
             <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
                 <div class="form-group">
                     <label>Nombre y Apellido</label>
@@ -344,7 +358,12 @@
                     <label>Contraseña Personal</label>
                     <input type="password" id="regPass" class="form-control" required placeholder="Su contraseña">
                 </div>
-                <button type="submit" class="btn btn-success" style="width:100%;">Registrar Usuario</button>
+                <div class="form-group">
+                    <label>Código de Invitación <small style="color:#718096;">(Opcional, dado por Directivo)</small></label>
+                    <input type="text" id="regCodigoInvitacion" class="form-control" placeholder="Ej: PROV-1234">
+                </div>
+
+                <button type="submit" class="btn btn-success" style="width:100%;">Solicitar Registro</button>
             </form>
         </div>
 
@@ -353,10 +372,39 @@
 
             <!-- CARTEL MODO SOLO LECTURA -->
             <div id="bannerReadOnly" class="banner-readonly hidden">
-                🔒 <b>Modo Consulta de Registro Histórico:</b> Estás viendo notas de un Año Lectivo anterior. Los registros están bloqueados para preceptores. Solo Directivos/Secretaría pueden modificarlos.
+                🔒 <b>Modo Consulta de Registro Histórico:</b> Estás viendo notas de un Año Lectivo anterior. Solo Directivos o Secretaría pueden modificarlas.
+            </div>
+
+            <!-- MÓDULO EXCLUSIVO DIRECTIVO/SECRETARÍA: GESTIÓN DE USUARIOS Y APROBACIONES -->
+            <div id="moduloGestionUsuarios" class="section-box no-print hidden">
+                <h4 style="margin-top:0; color: var(--primary);">🔐 Control Institucional de Accesos y Aprobaciones</h4>
+                <p style="font-size:0.85em; color:#718096; margin-top:-8px;">Aprobación de auxiliares registrados y generación de códigos de invitación.</p>
+                
+                <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+                    <button class="btn btn-primary" onclick="generarCodigoInvitacion()">🔑 Generar Código de Invitación Rápida</button>
+                    <span id="txtCodigoGenerado" style="font-weight:bold; align-self:center; color:var(--secondary);"></span>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Rol</th>
+                                <th>Curso Asignado</th>
+                                <th>Correo</th>
+                                <th>Estado</th>
+                                <th>Acción Directiva</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaUsuariosCuerpo">
+                            <!-- Filas de usuarios -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
             
-            <!-- CONFIGURACIÓN DE PLAN DE ESTUDIOS POR AÑO -->
+            <!-- CONFIGURACIÓN DE PLAN DE ESTUDIOS -->
             <div class="section-box no-print">
                 <h4 style="margin-top:0; color: var(--primary);">📚 Plan de Estudios del Colegio (Registro Único)</h4>
                 
@@ -382,11 +430,11 @@
                 </div>
 
                 <div id="listaMateriasConfig" style="margin-top: 15px;">
-                    <!-- Badges de materias cargadas -->
+                    <!-- Badges de materias -->
                 </div>
             </div>
 
-            <!-- REGISTRO DE ALUMNOS (O CARGA HISTÓRICA) -->
+            <!-- REGISTRO DE ALUMNOS -->
             <div class="section-box no-print">
                 <h4 style="margin-top:0; color: var(--primary);">➕ Ingreso / Digitalización Histórica de Alumnos</h4>
                 <form onsubmit="agregarAlumnoManual(event)" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
@@ -395,7 +443,7 @@
                         <input type="text" id="nuevoNombre" class="form-control" placeholder="Ej: Perez, Juan" required>
                     </div>
                     <div style="flex:1; min-width:90px;">
-                        <label style="font-size:0.85em; font-weight:bold;">Año Lectivo Registrado</label>
+                        <label style="font-size:0.85em; font-weight:bold;">Año Lectivo</label>
                         <select id="nuevoAnoLectivo" class="form-control">
                             <option value="2026">2026 (Actual)</option>
                             <option value="2025">2025</option>
@@ -432,7 +480,7 @@
                 </form>
             </div>
 
-            <!-- FILTROS Y CONTROLES DE NAVEGACIÓN TEMPORAL -->
+            <!-- FILTROS Y CONTROLES -->
             <div class="dashboard-header">
                 <div class="filters-group">
                     <div>
@@ -453,53 +501,3 @@
                         </select>
                     </div>
                     <div>
-                        <label><b>Curso:</b></label>
-                        <select id="filterCurso" class="form-control" onchange="cargarTabla()">
-                            <option value="1">1° Año</option>
-                            <option value="2">2° Año</option>
-                            <option value="3">3° Año</option>
-                            <option value="4">4° Año</option>
-                            <option value="5">5° Año</option>
-                            <option value="6">6° Año</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label><b>Trimestre:</b></label>
-                        <select id="filterTrimestre" class="form-control" onchange="cargarTabla()">
-                            <option value="0">1° Trimestre</option>
-                            <option value="1">2° Trimestre</option>
-                            <option value="2">3° Trimestre</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir / PDF</button>
-                    <button id="btnGuardarNotas" class="btn btn-success" onclick="guardarNotasMemoria()">💾 Guardar Calificaciones</button>
-                </div>
-            </div>
-
-            <!-- GRILLA DINÁMICA -->
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr id="encabezadoTabla">
-                            <!-- Columnas dinámicas -->
-                        </tr>
-                    </thead>
-                    <tbody id="tablaCuerpo">
-                        <!-- Filas de alumnos -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        const ANIO_LECTIVO_ACTUAL = "2026";
-
-        const planEstudiosPredeterminado = {
-            "1": ["Matemática", "Lengua", "Historia", "Geografía", "Biología", "Inglés"],
-            "2": ["Matemática", "Lengua", "Historia", "Física", "Biología", "Inglés"],
-            "3": ["Matemática", "Lengua", "Hi
